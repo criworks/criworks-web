@@ -9,26 +9,34 @@ export default {
     es: {
       hero: {
         title: 'Product Designer senior, disponible para tu equipo',
-        cta: 'Descargar CV',
-        ctaHref: '/cv.pdf',
+        cta: 'Hablemos',
+        ctaHref: '#contact',
       },
+      nav: [
+        { label: 'Perfil', href: '#proof' },
+        { label: 'Contacto', href: '#contact' },
+      ],
     },
     en: {
       hero: {
         title: 'Senior Product Designer, available for your team',
-        cta: 'Download CV',
-        ctaHref: '/cv.pdf',
+        cta: "Let's talk",
+        ctaHref: '#contact',
       },
+      nav: [
+        { label: 'Profile', href: '#proof' },
+        { label: 'Contact', href: '#contact' },
+      ],
     },
   },
   seo: {
     es: {
       title: 'Cri Works — Product Designer senior',
-      description: 'Experiencia, disponibilidad y trabajo seleccionado en 10 segundos.',
+      description: 'Experiencia y disponibilidad en 10 segundos.',
     },
     en: {
       title: 'Cri Works — Senior Product Designer',
-      description: 'Experience, availability, and selected work in 10 seconds.',
+      description: 'Experience and availability in 10 seconds.',
     },
   },
   intro: 'none',

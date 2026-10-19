@@ -7,4 +7,4 @@ export const sectionNames = ['hero', 'statement', 'proof', 'services', 'work', '
 export type SectionName = (typeof sectionNames)[number]
 
 // Sections and order for the home page.
-export const homeSections = ['hero', 'statement', 'proof', 'services', 'work', 'about', 'contact'] as const satisfies readonly SectionName[]
+export const homeSections = ['hero', 'statement', 'proof', 'services', 'work', 'contact'] as const satisfies readonly SectionName[]

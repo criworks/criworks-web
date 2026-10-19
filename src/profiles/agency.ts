@@ -4,7 +4,7 @@ import type { Profile } from '@/data'
 export default {
   slug: 'freelance/agency',
   audience: 'Agencies that need senior design capacity per project.',
-  sections: ['hero', 'statement', 'services', 'work', 'about', 'contact'],
+  sections: ['hero', 'statement', 'services', 'work', 'contact'],
   content: {
     es: {
       hero: {

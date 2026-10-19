@@ -3,8 +3,8 @@ import type { SiteConfig } from '@/data'
 export const site = {
   name: 'Cri Works',
   email: 'cri@cri.works',
-  // TODO(crim): confirm the final domain.
-  url: 'https://cri.works',
+  // www is the primary domain on Vercel; cri.works redirects to it.
+  url: 'https://www.cri.works',
   ogImage: '/og-image.png',
   social: [
     { label: 'LinkedIn', href: 'https://linkedin.com/in/criworks' },

@@ -2,7 +2,8 @@ import type { Content, Localized } from '@/data'
 
 // Default copy for every language. The home page uses it as is; each profile
 // in src/profiles/ overrides only what it needs.
-// TODO(crim): lines marked TODO still carry template demo values.
+// About (bio) and Work (projects) stay hidden until there is real copy for them:
+// add 'about' back to homeSections, and fill data/projects.ts.
 export const content = {
   es: {
     seo: {
@@ -10,16 +11,15 @@ export const content = {
       description: 'Diseño productos que dan claridad a startups tecnológicas: web, apps, marca e IA.',
     },
     nav: [
-      { label: 'Trabajo', href: '#work' },
-      { label: 'Sobre mí', href: '#about' },
+      { label: 'Servicios', href: '#services' },
       { label: 'Contacto', href: '#contact' },
     ],
     hero: {
       tagline: 'Product Designer en Santiago, Chile.',
       title: 'Cri Works',
       subtitle: 'Diseño productos que dan claridad a startups tecnológicas.',
-      cta: 'Conoce mi trabajo',
-      ctaHref: '#work',
+      cta: 'Cómo te ayudo',
+      ctaHref: '#services',
     },
     statement: {
       lead: 'Sientes que todo está difuso.',
@@ -32,12 +32,11 @@ export const content = {
     proof: {
       title: 'En 10 segundos',
       role: 'Product Designer',
-      years: 10, // TODO(crim): real years of experience
+      years: 12,
       specialties: ['Diseño de producto', 'Design systems', 'Front-end'],
-      availability: 'Disponible desde el próximo mes', // TODO(crim)
+      availability: 'Iniciando el próximo mes',
       timezone: 'Santiago, Chile (UTC−3)',
-      languages: ['Español', 'Inglés'], // TODO(crim): confirm
-      cvUrl: '/cv.pdf',
+      languages: ['Español', 'Inglés'],
       labels: {
         role: 'Rol',
         experience: 'Experiencia',
@@ -68,7 +67,7 @@ export const content = {
     work: { title: 'Trabajo seleccionado', subtitle: 'Algunos proyectos recientes.' },
     about: {
       title: 'Sobre mí',
-      // TODO(crim): your bio.
+      // Hidden for now (not in homeSections); placeholder until the bio is ready.
       bio: [
         'Texto de ejemplo: cuenta en dos o tres frases quién eres y cómo trabajas.',
         'Un segundo párrafo para tu enfoque, tus clientes o lo que te diferencia.',
@@ -105,16 +104,15 @@ export const content = {
       description: 'I design products that bring clarity to tech startups: web, apps, brand, and AI.',
     },
     nav: [
-      { label: 'Work', href: '#work' },
-      { label: 'About', href: '#about' },
+      { label: 'Services', href: '#services' },
       { label: 'Contact', href: '#contact' },
     ],
     hero: {
       tagline: 'Product Designer in Santiago, Chile.',
       title: 'Cri Works',
       subtitle: 'I design products that bring clarity to tech startups.',
-      cta: 'See my work',
-      ctaHref: '#work',
+      cta: 'How I help',
+      ctaHref: '#services',
     },
     statement: {
       lead: 'Everything feels blurry.',
@@ -127,12 +125,11 @@ export const content = {
     proof: {
       title: 'In 10 seconds',
       role: 'Product Designer',
-      years: 10, // TODO(crim): real years of experience
+      years: 12,
       specialties: ['Product design', 'Design systems', 'Front-end'],
-      availability: 'Available from next month', // TODO(crim)
+      availability: 'Starting next month',
       timezone: 'Santiago, Chile (UTC−3)',
-      languages: ['Spanish', 'English'], // TODO(crim): confirm
-      cvUrl: '/cv.pdf',
+      languages: ['Spanish', 'English'],
       labels: {
         role: 'Role',
         experience: 'Experience',
@@ -163,7 +160,7 @@ export const content = {
     work: { title: 'Selected work', subtitle: 'A few recent projects.' },
     about: {
       title: 'About me',
-      // TODO(crim): your bio.
+      // Hidden for now (not in homeSections); placeholder until the bio is ready.
       bio: [
         'Sample text: say in two or three sentences who you are and how you work.',
         'A second paragraph for your approach, your clients, or what sets you apart.',
