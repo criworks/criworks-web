@@ -1,5 +1,0 @@
-export * from './i18n'
-export * from './site'
-export * from './theme'
-export * from './content'
-export * from './sections'

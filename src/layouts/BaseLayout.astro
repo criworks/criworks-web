@@ -1,43 +1,33 @@
 ---
-import { Seo, ThemeStyle } from '@/components/layout'
-import type { Locale } from '@/data'
-import '@/styles/global.css'
+import '../styles/global.css';
 
 interface Props {
-  title: string
-  description: string
-  locale: Locale
-  /** Path without locale prefix, for canonical and hreflang. */
-  path?: string
-  image?: string
+	title?: string;
+	description?: string;
 }
 
-const { title, description, locale, path, image } = Astro.props
+const {
+	title = 'Cri Works — Product Designer',
+	description = 'Shaping clarity for tech-driven startups through thoughtful product design.',
+} = Astro.props;
+
+const pageTitle = Astro.url.pathname === '/' ? title : `${title} · Cri Works`;
 ---
 
 <!doctype html>
-<html lang={locale}>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="generator" content={Astro.generator} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preload" href="/fonts/Switzer-Variable.woff2" as="font" type="font/woff2" crossorigin />
-    <!-- Runs before paint: marks JS as available and whether the 'subtle'
-         intro already played (see hero-initial.css; the key matches
-         INTRO_SEEN_KEY in lib/intro.ts), and keeps the browser from
-         restoring scroll before animations set up. -->
-    <script is:inline>
-      document.documentElement.classList.add('js')
-      try {
-        if (sessionStorage.getItem('intro-seen') === '1') document.documentElement.classList.add('intro-seen')
-      } catch {}
-      history.scrollRestoration = 'manual'
-    </script>
-    <Seo title={title} description={description} locale={locale} path={path} image={image} />
-    <ThemeStyle />
-  </head>
-  <body class="min-h-dvh bg-background font-sans text-foreground antialiased">
-    <slot />
-  </body>
-</html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content={description} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{pageTitle}</title>
+	</head>
+	<body class="min-h-dvh bg-background text-foreground antialiased">
+	        <slot />
+	        <script>
+	                import { initLenis } from '../lib/lenis';
+	                initLenis();
+	        </script>
+	</body></html>
