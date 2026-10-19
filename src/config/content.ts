@@ -1,12 +1,13 @@
 import type { Content, Localized } from '@/data'
 
-// BUYER: default copy for every language. The home page uses it as is;
-// each profile in src/profiles/ overrides only what it needs.
+// Default copy for every language. The home page uses it as is; each profile
+// in src/profiles/ overrides only what it needs.
+// TODO(crim): lines marked TODO still carry template demo values.
 export const content = {
   es: {
     seo: {
-      title: 'Tu Nombre — Consultor de producto',
-      description: 'Diseño y desarrollo de productos digitales, marcas y uso de IA.',
+      title: 'Cri Works — Diseño de producto',
+      description: 'Diseño productos que dan claridad a startups tecnológicas: web, apps, marca e IA.',
     },
     nav: [
       { label: 'Trabajo', href: '#work' },
@@ -14,24 +15,66 @@ export const content = {
       { label: 'Contacto', href: '#contact' },
     ],
     hero: {
-      title: 'Diseño productos digitales que tu equipo puede construir',
-      subtitle: 'Consultor de diseño y desarrollo. Web, apps, marca e IA.',
-      cta: 'Ver trabajo',
+      tagline: 'Product Designer en Santiago, Chile.',
+      title: 'Cri Works',
+      subtitle: 'Diseño productos que dan claridad a startups tecnológicas.',
+      cta: 'Conoce mi trabajo',
+      ctaHref: '#work',
+    },
+    statement: {
+      lead: 'Sientes que todo está difuso.',
+      lines: [
+        'Estás construyendo rápido, pero no se ve claro.',
+        'El producto funciona, pero aún no se siente bien.',
+        'La visión está ahí, pero no todos parecen entenderla.',
+      ],
     },
     proof: {
-      role: 'Consultor de producto',
-      years: 10,
+      title: 'En 10 segundos',
+      role: 'Product Designer',
+      years: 10, // TODO(crim): real years of experience
       specialties: ['Diseño de producto', 'Design systems', 'Front-end'],
-      availability: 'Disponible desde el próximo mes',
-      timezone: 'UTC−5',
-      languages: ['Español', 'Inglés'],
+      availability: 'Disponible desde el próximo mes', // TODO(crim)
+      timezone: 'Santiago, Chile (UTC−3)',
+      languages: ['Español', 'Inglés'], // TODO(crim): confirm
       cvUrl: '/cv.pdf',
+      labels: {
+        role: 'Rol',
+        experience: 'Experiencia',
+        years: 'años',
+        specialties: 'Especialidades',
+        availability: 'Disponibilidad',
+        timezone: 'Zona horaria',
+        languages: 'Idiomas',
+      },
+    },
+    services: {
+      title: 'Cómo te ayudo',
+      subtitle: 'Del primer boceto al producto en producción.',
+      items: [
+        { title: 'Diseño de producto', description: 'Investigación, flujos e interfaces que tu equipo puede construir sin adivinar.' },
+        { title: 'Design systems', description: 'Componentes y tokens compartidos entre diseño y código.' },
+        { title: 'Desarrollo front-end', description: 'Sitios y apps rápidos, accesibles y fáciles de mantener.' },
+        { title: 'IA aplicada', description: 'Flujos con IA que resuelven un problema real de tu negocio.' },
+      ],
+      processTitle: 'Proceso',
+      steps: [
+        { title: 'Entender', description: 'Una llamada para conocer el problema, el equipo y las restricciones.' },
+        { title: 'Proponer', description: 'Alcance, entregables y calendario por escrito.' },
+        { title: 'Construir', description: 'Entregas semanales que puedes revisar y usar.' },
+        { title: 'Traspasar', description: 'Documentación y acompañamiento para que tu equipo siga solo.' },
+      ],
     },
     work: { title: 'Trabajo seleccionado', subtitle: 'Algunos proyectos recientes.' },
     about: {
       title: 'Sobre mí',
-      bio: 'Texto de ejemplo: cuenta en dos o tres frases quién eres y cómo trabajas.',
+      // TODO(crim): your bio.
+      bio: [
+        'Texto de ejemplo: cuenta en dos o tres frases quién eres y cómo trabajas.',
+        'Un segundo párrafo para tu enfoque, tus clientes o lo que te diferencia.',
+      ],
       skills: ['Estrategia', 'UX/UI', 'Prototipado', 'Desarrollo web'],
+      portraitAlt: 'Retrato de Cri',
     },
     contact: {
       title: 'Hablemos',
@@ -46,13 +89,20 @@ export const content = {
       viewWork: 'Ver trabajo',
       backToHome: 'Volver al inicio',
       downloadCv: 'Descargar CV',
-      switchLanguage: 'English',
+      languageName: 'Español',
+      mainNavigation: 'Navegación principal',
+      email: 'Email',
+      copyEmail: 'Copiar email',
+      visitProject: 'Visitar proyecto',
+      allWork: 'Todo el trabajo',
+      year: 'Año',
+      tags: 'Áreas',
     },
   },
   en: {
     seo: {
-      title: 'Your Name — Product consultant',
-      description: 'Design and development of digital products, brands, and AI use.',
+      title: 'Cri Works — Product design',
+      description: 'I design products that bring clarity to tech startups: web, apps, brand, and AI.',
     },
     nav: [
       { label: 'Work', href: '#work' },
@@ -60,24 +110,66 @@ export const content = {
       { label: 'Contact', href: '#contact' },
     ],
     hero: {
-      title: 'I design digital products your team can build',
-      subtitle: 'Design and development consultant. Web, apps, brand, and AI.',
-      cta: 'See work',
+      tagline: 'Product Designer in Santiago, Chile.',
+      title: 'Cri Works',
+      subtitle: 'I design products that bring clarity to tech startups.',
+      cta: 'See my work',
+      ctaHref: '#work',
+    },
+    statement: {
+      lead: 'Everything feels blurry.',
+      lines: [
+        "You're building fast, but it doesn't look clear.",
+        "The product works, but it doesn't feel right yet.",
+        "The vision is there, but not everyone seems to get it.",
+      ],
     },
     proof: {
-      role: 'Product consultant',
-      years: 10,
+      title: 'In 10 seconds',
+      role: 'Product Designer',
+      years: 10, // TODO(crim): real years of experience
       specialties: ['Product design', 'Design systems', 'Front-end'],
-      availability: 'Available from next month',
-      timezone: 'UTC−5',
-      languages: ['Spanish', 'English'],
+      availability: 'Available from next month', // TODO(crim)
+      timezone: 'Santiago, Chile (UTC−3)',
+      languages: ['Spanish', 'English'], // TODO(crim): confirm
       cvUrl: '/cv.pdf',
+      labels: {
+        role: 'Role',
+        experience: 'Experience',
+        years: 'years',
+        specialties: 'Specialties',
+        availability: 'Availability',
+        timezone: 'Time zone',
+        languages: 'Languages',
+      },
+    },
+    services: {
+      title: 'How I help',
+      subtitle: 'From the first sketch to the product in production.',
+      items: [
+        { title: 'Product design', description: 'Research, flows, and interfaces your team can build without guessing.' },
+        { title: 'Design systems', description: 'Components and tokens shared between design and code.' },
+        { title: 'Front-end development', description: 'Fast, accessible sites and apps that are easy to maintain.' },
+        { title: 'Applied AI', description: 'AI flows that solve a real problem for your business.' },
+      ],
+      processTitle: 'Process',
+      steps: [
+        { title: 'Understand', description: 'A call to learn the problem, the team, and the constraints.' },
+        { title: 'Propose', description: 'Scope, deliverables, and timeline in writing.' },
+        { title: 'Build', description: 'Weekly deliveries you can review and use.' },
+        { title: 'Hand over', description: 'Documentation and support so your team can carry on.' },
+      ],
     },
     work: { title: 'Selected work', subtitle: 'A few recent projects.' },
     about: {
-      title: 'About',
-      bio: 'Sample copy: say in two or three sentences who you are and how you work.',
+      title: 'About me',
+      // TODO(crim): your bio.
+      bio: [
+        'Sample text: say in two or three sentences who you are and how you work.',
+        'A second paragraph for your approach, your clients, or what sets you apart.',
+      ],
       skills: ['Strategy', 'UX/UI', 'Prototyping', 'Web development'],
+      portraitAlt: 'Portrait of Cri',
     },
     contact: {
       title: "Let's talk",
@@ -92,7 +184,14 @@ export const content = {
       viewWork: 'See work',
       backToHome: 'Back to home',
       downloadCv: 'Download CV',
-      switchLanguage: 'Español',
+      languageName: 'English',
+      mainNavigation: 'Main navigation',
+      email: 'Email',
+      copyEmail: 'Copy email',
+      visitProject: 'Visit project',
+      allWork: 'All work',
+      year: 'Year',
+      tags: 'Areas',
     },
   },
 } as const satisfies Localized<Content>

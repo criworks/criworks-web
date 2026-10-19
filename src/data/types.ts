@@ -1,3 +1,4 @@
+import type { ImageMetadata } from 'astro'
 import type { locales } from '@/config/i18n'
 import type { SectionName } from '@/config/sections'
 
@@ -15,10 +16,29 @@ export interface NavItem { readonly label: string; readonly href: string }
 export interface SocialLink { readonly label: string; readonly href: string }
 
 export interface SeoContent { readonly title: string; readonly description: string }
-export interface HeroContent { readonly title: string; readonly subtitle: string; readonly cta: string }
+export interface HeroContent {
+  readonly tagline: string
+  readonly title: string
+  readonly subtitle: string
+  readonly cta: string
+  /** Where the CTA goes: an anchor ('#work') or a URL ('/cv.pdf'). */
+  readonly ctaHref: string
+}
+export interface StatementContent {
+  /** First line, in the foreground color. */
+  readonly lead: string
+  /** Following lines, in the accent color. */
+  readonly lines: readonly string[]
+}
 export interface SectionContent { readonly title: string; readonly subtitle?: string }
-export interface AboutContent extends SectionContent { readonly bio: string; readonly skills: readonly string[] }
+export interface AboutContent extends SectionContent {
+  /** Paragraphs. */
+  readonly bio: readonly string[]
+  readonly skills: readonly string[]
+  readonly portraitAlt: string
+}
 export interface ProofContent {
+  readonly title: string
   readonly role: string
   readonly years: number
   readonly specialties: readonly string[]
@@ -26,6 +46,23 @@ export interface ProofContent {
   readonly timezone: string
   readonly languages: readonly string[]
   readonly cvUrl?: string
+  readonly labels: {
+    readonly role: string
+    readonly experience: string
+    /** Unit after the number of years, e.g. 'años'. */
+    readonly years: string
+    readonly specialties: string
+    readonly availability: string
+    readonly timezone: string
+    readonly languages: string
+  }
+}
+export interface ServiceItem { readonly title: string; readonly description: string }
+export interface ServicesContent extends SectionContent {
+  readonly items: readonly ServiceItem[]
+  readonly processTitle: string
+  /** Steps of the process, in order. */
+  readonly steps: readonly ServiceItem[]
 }
 export interface ContactContent { readonly title: string; readonly tagline: string; readonly cta: string }
 export interface UIStrings {
@@ -36,14 +73,25 @@ export interface UIStrings {
   readonly viewWork: string
   readonly backToHome: string
   readonly downloadCv: string
-  readonly switchLanguage: string
+  /** This language's own name, shown in language switches (e.g. 'Español'). */
+  readonly languageName: string
+  readonly mainNavigation: string
+  /** Label of the header email button before JS shows the address. */
+  readonly email: string
+  readonly copyEmail: string
+  readonly visitProject: string
+  readonly allWork: string
+  readonly year: string
+  readonly tags: string
 }
 
 export interface Content {
   readonly seo: SeoContent
   readonly nav: readonly NavItem[]
   readonly hero: HeroContent
+  readonly statement: StatementContent
   readonly proof: ProofContent
+  readonly services: ServicesContent
   readonly work: SectionContent
   readonly about: AboutContent
   readonly contact: ContactContent
@@ -54,8 +102,12 @@ export interface ProjectItem {
   readonly slug: string
   readonly title: Localized<string>
   readonly description: Localized<string>
-  readonly thumbnail: string
+  /** Optional longer text for the project page, as paragraphs. */
+  readonly body?: Localized<readonly string[]>
+  /** Imported image (src/assets/...), optimized at build time. 4:3 works best. */
+  readonly thumbnail: ImageMetadata
   readonly tags: readonly string[]
+  /** Live site or case study, shown on the project page. */
   readonly url?: string
   readonly year: number
 }
@@ -83,6 +135,12 @@ export interface SiteConfig {
   readonly ogImage: string
   readonly social: readonly SocialLink[]
   readonly defaultIntro: IntroMode
+  /**
+   * Horizontal point of the hero image (0 = left edge, 1 = right edge) kept
+   * centered on phones, where only a slice of the wide image fits.
+   * Desktop always shows it from the left. Default 0.5.
+   */
+  readonly heroFocusX?: number
 }
 
 export interface Profile {

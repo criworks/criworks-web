@@ -25,6 +25,7 @@ describe('validateProfiles', () => {
   it('rejects slugs that start with a locale or a reserved path', () => {
     expect(() => validateProfiles([make('en/cto')])).toThrow(/reserved/)
     expect(() => validateProfiles([make('work/cto')])).toThrow(/reserved/)
+    expect(() => validateProfiles([make('kit')])).toThrow(/reserved/)
   })
 
   it('rejects malformed slugs', () => {
@@ -34,8 +35,10 @@ describe('validateProfiles', () => {
 })
 
 describe('shipped profiles', () => {
-  it('loads the demo profiles and skips _template', () => {
-    expect(profiles.map(p => p.slug)).toEqual(['contractor/hiring-manager', 'freelance/agency'])
+  // Holds for any set of profiles, so adding your own keeps it green.
+  it('loads the profiles and skips _template', () => {
+    expect(profiles.length).toBeGreaterThan(0)
+    expect(profiles.map(p => p.slug)).not.toContain('your-audience')
   })
 
   it('only reference existing projects and sections', () => {

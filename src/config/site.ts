@@ -1,14 +1,17 @@
 import type { SiteConfig } from '@/data'
 
-// BUYER: your identity. Copy per language lives in content.ts.
 export const site = {
-  name: 'Your Name',
-  email: 'you@yourdomain.com',
-  url: 'https://yourdomain.com',
+  name: 'Cri Works',
+  email: 'cri@cri.works',
+  // TODO(crim): confirm the final domain.
+  url: 'https://cri.works',
   ogImage: '/og-image.png',
   social: [
-    { label: 'LinkedIn', href: 'https://linkedin.com/in/your-handle' },
-    { label: 'Instagram', href: 'https://instagram.com/your-handle' },
+    { label: 'LinkedIn', href: 'https://linkedin.com/in/criworks' },
+    { label: 'GitHub', href: 'https://github.com/criworks' },
+    { label: 'Instagram', href: 'https://instagram.com/cri.works' },
   ],
   defaultIntro: 'subtle',
+  // The portrait sits at 42% of hero-bg.webp.
+  heroFocusX: 0.42,
 } as const satisfies SiteConfig

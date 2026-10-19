@@ -106,9 +106,9 @@ Example where arbitrary IS correct: `max-w-[860px]` — no named equivalent for 
 | 1. Foundation ✅ | Repo, tooling, lib utilities, styles skeleton | — |
 | 2. Cleanup + CI ✅ | Unused deps and fonts out, Astro 7, readable hero without JS, CI | CI green on `main` |
 | 3. Config, profiles, i18n ✅ | Types, config per locale, profiles, ThemeStyle, routes | Two demo profiles build in ES and EN |
-| 4. Layouts + UI (port) | BaseLayout with Seo, primitives ported from consultant-web | Sample page shows every component |
-| 5. Header, Hero, intro (port) | Header, Hero entrance, scroll pan+blur, intro modes | Hero readable at 0 ms, LCP < 2 s mobile |
-| 6. Sections | Work, About, Proof, Services, Contact, `_template/`, `work/[slug]` | Full home driven by config |
+| 4. Layouts + UI (port) ✅ | BaseLayout with Seo, primitives ported from consultant-web | Sample page shows every component |
+| 5. Header, Hero, intro (port) ✅ | Header, Hero entrance, scroll pan+blur, intro modes | Hero readable at 0 ms, LCP < 2 s mobile |
+| 6. Sections ✅ | Work, About, Proof, Services, Contact, `_template/`, `work/[slug]` | Full home driven by config |
 | 7. Author site + deploy | `criworks-web` repo from the template, real content, deploy | Author site in production |
 | 8. Leads + analytics | Form, booking link, cookieless analytics, events per profile | Leads and visits visible per landing |
 | 9. Real use | Remaining landings, copy tuned with data, fixes made here | Weeks without structural changes |
@@ -158,135 +158,47 @@ Repo init, tooling config, lib utilities (`constants`, `gsap`, `motion`), styles
 
 ---
 
-## Phase 4 — Layouts + UI primitives (port from consultant-web)
+## Phase 4 — Layouts + UI primitives (port from consultant-web) ✅ COMPLETE
 
-**Goal**: BaseLayout, PageLayout, Seo, and all UI components. Port behavior and look from `criworks/consultant-web` (branch `development`), adapted to these rules: strings from config, colors from tokens, no `site-col-*` grid.
+**What exists**:
+- `src/components/layout/Seo.astro` — title, description, canonical, Open Graph, Twitter card, `hreflang` for every locale plus `x-default`, JSON-LD (`Person` + `ProfessionalService`). Absolute URLs from `site.url`.
+- `src/layouts/BaseLayout.astro` — `<html lang>`, favicon, Switzer preload, inline head script (`js` class + `history.scrollRestoration = 'manual'`), Seo, ThemeStyle. Props: `title`, `description`, `locale`, `path`, `image`.
+- `src/layouts/PageLayout.astro` — BaseLayout plus a fixed top bar (site name, language switch) for inner pages.
+- `src/components/layout/` — `Container` (`tag`, `maxWidth`), `Stack` (`tag`, `gap`).
+- `src/components/ui/` — `Link` (ported; `icon` typed as Lucide `AstroComponent`), `Button` (ported secondary, plus primary and ghost; `size`), `Badge`, `Toast` (`#toast` / `#toast-message`, centered without transforms so GSAP can own `y`).
+- `src/components/composed/` — `SectionHeader` (optional `animate` prefix for `data-animate`), `ProjectCard` (links to `work/{slug}` per locale), `NavDrawer` (ported; opened by any `[data-nav-drawer-open]`, closes on Escape, close button or link; moves focus in and back; GSAP fade + stagger, skipped with reduced motion).
+- `src/pages/kit/[...locale].astro` — component kit at `/kit` and `/kit/en`, built only in `npm run dev`. `kit` is a reserved profile slug.
+- Demo assets: `public/favicon.svg`, `public/images/work-placeholder.svg`. New UI string `ui.mainNavigation`.
 
-### `src/components/layout/Seo.astro`
-Props: `title`, `description`, `image`, `locale`, `path`. Emits title, description, canonical, Open Graph, Twitter card, `hreflang` alternates for every locale, and JSON-LD (`Person` + `ProfessionalService`).
-
-### `src/layouts/BaseLayout.astro`
-- Imports `@/styles/global.css`, injects `<ThemeStyle />` and `<Seo />` in `<head>`.
-- `<html lang={locale}>`.
-- Inline script in `<head>`: `document.documentElement.classList.add('js')` and `history.scrollRestoration = 'manual'`.
-- Preloads the Switzer variable font.
-- **No Lenis.**
-
-### `src/layouts/PageLayout.astro`
-Wraps BaseLayout. Adds the fixed nav for inner pages.
-
-### `src/components/layout/`
-`Container.astro` (props `maxWidth`, `tag`), `Stack.astro` (`gap`), barrel.
-
-### `src/components/ui/`
-- `Link.astro` — port from consultant-web. Variants `primary` (CTA with icon in circle), `secondary` (nav link with optional `active` dot), `tertiary` (social: dot mode if `active` is passed, arrow + `_blank` otherwise). Type `icon` properly instead of `any`.
-- `Button.astro` — port and extend: `variant` ('primary' | 'secondary' | 'ghost'), `icon`, `size`, `type` (default 'button').
-- `Badge.astro` — `label`, `color` ('default' | 'accent').
-- `Toast.astro` — fixed container, ids `toast` / `toast-message`.
-- Barrel.
-
-### `src/components/composed/`
-`SectionHeader.astro` (`eyebrow`, `title`, `subtitle`), `ProjectCard.astro` (`project`, `data-animate="work-card"`), `NavDrawer.astro` (mobile overlay, port from consultant-web, GSAP open/close), barrels.
-
-**Commits for Phase 4**:
-```
-feat(components): add Seo with canonical, hreflang, OG, and JSON-LD
-feat(layouts): add BaseLayout and PageLayout
-feat(components): add Container and Stack layout primitives
-feat(components): port Link and Button; add Badge and Toast
-feat(components): add SectionHeader, ProjectCard, and NavDrawer
-```
+**Notes for Phase 5**: the Header renders the hamburger with `data-nav-drawer-open` and places `<NavDrawer>` and `<Toast>` once per page. Avoid overriding a component's text size through `class` (Tailwind has no class merging here); add a prop instead.
 
 ---
 
-## Phase 5 — Header, Hero, intro (port from consultant-web)
+## Phase 5 — Header, Hero, intro (port from consultant-web) ✅ COMPLETE
 
-**Goal**: Header, Hero, and page-level animation orchestration. Hero text is readable at first paint → a short entrance lifts it → scroll drives bg pan + blur + intro fade.
+**What exists**:
+- `src/pages/[...path].astro` — fixed hero background (`<Image>` eager + `fetchpriority="high"`, `data-animate="hero-bg"`) with a bottom gradient for contrast, `intro-backdrop` layer, `<main>` with the Hero then the profile's sections, one `NavDrawer` (nav + language links) and one `Toast`. Sections other than Hero and Statement are placeholders until Phase 6.
+- `src/components/composed/Header.astro` — props only (no config imports). Nav links, language switch (`hreflang`), email button: address split into `data-u`/`data-d`, never in the HTML; reads `ui.email` until JS shows it; click copies and shows the Toast, `mailto:` fallback. Hamburger with `data-nav-drawer-open` below `narrow`.
+- `src/lib/animations/toast.ts` — `showToast(gsap, message)`. Not re-exported from `@/lib` (DOM code); import from `@/lib/animations`.
+- `src/lib/intro.ts` — `INTRO_SEEN_KEY` and pure `shouldPlayEntrance(mode, seen, reducedMotion)`, tested.
+- `src/sections/Hero/` — `Hero.astro` (Header, tagline, title, social links, subtitle, CTA to `hero.ctaHref`; `data-intro-mode`; sticky only with JS and motion allowed) and `Hero.anim.ts` (`createHeroEntrance`, `setHeroFinal`, `createHeroScroll`: bg pan + blur + opacity, backdrop in, hero text out in three groups, triggered by the next section).
+- `src/sections/Statement/` — ported Intro; copy in `content.statement`; lines rise in on scroll (`Statement.anim.ts`). Solid background when the scroll animation can't run.
+- Intro modes: `none` never dims or animates; `subtle` plays once per session (the inline head script adds `intro-seen` to `<html>` so a repeat visit is not dimmed); `full` plays every visit and also settles the bg image. Reduced motion skips all of it.
+- Content additions: `hero.tagline`, `hero.ctaHref`, `statement`, `ui.email`, `ui.copyEmail`; `statement` section key. Demo image `src/assets/images/hero-bg.webp` (3600×1200).
 
-### Page structure (`[...path].astro`)
-```astro
-<!-- Full-bleed hero background — wide panoramic, animated by GSAP during scroll -->
-<div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-  <Image src={heroBg} alt="" data-animate="hero-bg" loading="eager" class="h-dvh w-auto max-w-none" />
-</div>
-
-<!-- Intro backdrop — starts invisible, GSAP drives opacity + blur during scroll -->
-<div class="fixed inset-0 z-10 pointer-events-none" data-animate="intro-backdrop" />
-
-<main class="relative z-40">
-  <Hero />
-  {/* sections from profile.sections */}
-</main>
-```
-
-### `src/components/header/Header.astro`
-Port from consultant-web: nav links from `site.nav[locale]`, contact button with email obfuscation (split on `@`, assembled in JS via `dataset.u` + `dataset.d`), copy to clipboard with toast, hamburger + NavDrawer below the `narrow` breakpoint. Layout rebuilt with Tailwind flex/grid. All labels from `content.ui`. Add a language switcher using `localizedPath`.
-
-### `src/lib/animations/shared.ts`
-`showToast({ gsap, message })`, `hideToast({ gsap })`. Barrel in `src/lib/animations/index.ts`.
-
-### `src/sections/Hero/`
-- `Hero.astro`: `section#hero sticky top-0 h-dvh overflow-hidden`. Text over the fixed bg image. Content from resolved content. `data-animate` attrs (`hero-title`, `hero-sub`, `hero-cta`, …) matching `hero-initial.css`.
-- `Hero.anim.ts`:
-  - `createHeroEntrance({ gsap, paused })` — port the cascade from consultant-web, from `opacity: HERO_ENTRANCE.START_OPACITY, y: HERO_ENTRANCE.OFFSET_Y`, total ≤ `HERO_ENTRANCE.MAX_DURATION`. `power3.out`.
-  - `createScrollAnimation({ gsap, trigger, isMobile })` — scrub:1 timeline: `hero-bg` pan `HERO_BG.PAN_X` + blur `BLUR_ENTER` → `BLUR_EXIT` + `OPACITY`; `intro-backdrop` opacity → 1, blur → 40px; hero text fades out in 3 groups; `intro-text` fades in from `y:50`.
-
-### Intro modes (from the profile)
-- `none` — no entrance; scroll animation only.
-- `subtle` (default) — entrance on the first visit of the session (`sessionStorage`), then direct.
-- `full` — entrance on every visit, plus the richer scroll sequence.
-Always skipped when `shouldAnimateByPreference()` is false.
-
-### Orchestration
-```ts
-if (shouldAnimateByPreference()) {
-  const heroTl = createHeroEntrance({ gsap, paused: true })
-  heroTl.eventCallback('onComplete', () => {
-    requestAnimationFrame(() => createScrollAnimation({ gsap, trigger: introEl, isMobile }))
-  })
-  introMode === 'none' || alreadySeen ? heroTl.progress(1) : heroTl.play()
-}
-```
-
-**Commits for Phase 5**:
-```
-feat(lib): add shared toast animation utilities
-feat(components): port Header with email obfuscation, toast, and mobile nav
-feat(sections): add Hero markup and layout
-feat(sections): add Hero entrance and scroll timeline with bg pan+blur
-feat(pages): wire hero layers, intro modes, and orchestration
-```
-
-**After Phase 5**: hero is readable before JS, the entrance takes under 0.8 s, scroll pans and blurs the bg, intro text fades in. LCP < 2 s on mobile (Lighthouse).
+**Checked in Chromium**: no console errors; without JS the hero is at full opacity and the email address is absent from the HTML; email copy + toast work; scroll fades the hero out and reveals the statement; `none` and repeat `subtle` visits are not dimmed; drawer opens on mobile. LCP element is the H1 (local preview); run Lighthouse on the Vercel preview for the mobile number.
 
 ---
 
-## Phase 6 — Sections + _template + project pages
+## Phase 6 — Sections + _template + project pages ✅ COMPLETE
 
-**Goal**: all home sections, `_template/` for buyer extensibility, project detail pages. Pages render the sections listed in the profile.
-
-### `src/sections/`
-- `Proof/` — the "in 10 seconds" block for hiring managers: role, years, specialties, availability, timezone, languages, "View work" and "Download CV" buttons.
-- `Work/` — `SectionHeader` + grid of `ProjectCard`, filtered by `profile.projects` when set. `createWorkAnimation({ gsap, trigger })`, stagger from y:32.
-- `About/` — bio, skills (`Badge`), portrait. `createAboutAnimation`.
-- `Services/` — what is offered and the process, in steps. `createServicesAnimation`.
-- `Contact/` — title, tagline, email button, social links. `createContactAnimation`.
-- `_template/` — both files commented step by step (copy folder → rename → add content type and copy → register in `config/sections.ts` → add the animation call).
-
-### `src/pages/work/[slug].astro`
-Dynamic route from `data/projects.ts`, per locale. `PageLayout`. Thumbnail, title, year, tags, description, links.
-
-### Demo assets
-Wide panoramic hero placeholder (≥ 3:1), portrait placeholder, work thumbnails, `favicon.svg`, `og-image.png` (1200×630).
-
-**Commits for Phase 6**:
-```
-feat(sections): add Proof section for hiring managers
-feat(sections): add Work, About, Services, and Contact sections
-feat(sections): add _template section for buyer extensibility
-feat(pages): add work/[slug] project detail page
-feat(assets): add demo placeholders, favicon, and og-image
-```
+**What exists**:
+- `src/sections/` — `Proof` (role, years, specialties, availability, timezone, languages; "View work" and "Download CV", the latter only when `proof.cvUrl` is set), `Services` (offer cards + numbered process), `Work` (`ProjectCard` grid of the profile's projects), `About` (portrait, bio paragraphs, skill badges), `Contact` (large title, copy-email pill, social links). Each has `{Name}.anim.ts` built on `createReveal` (`lib/animations/reveal.ts`: fade + lift once on scroll, skipped with reduced motion; content is in the HTML at full opacity).
+- `src/sections/_template/` — `Template.astro` + `Template.anim.ts`, commented step by step (copy, type, copy per locale, register in `config/sections.ts`, export, render, animation). Never rendered.
+- `src/pages/[...locale]/work/[slug].astro` — project page per project and locale (`/work/{slug}`, `/en/work/{slug}`) with `PageLayout`: title, description, image, year, tags, optional `body` and `url`.
+- `ui/EmailButton` + `lib/email.ts` — the copy-email logic from the Header, shared with Contact (`plain` and `pill` variants).
+- Content and data: `services`, `proof.title` and `proof.labels`, `about.bio` as paragraphs, `about.portraitAlt`, `ui.visitProject` / `allWork` / `year` / `tags`; `ui.switchLanguage` replaced by `ui.languageName` (each language's own name, so the switch reads "English" on the Spanish page). `ProjectItem.thumbnail` is now an imported image (optimized by `astro:assets`) and gains optional `body`. `services` added to `sectionNames` and the home.
+- Demo assets: `src/assets/images/work/*.webp`, `src/assets/images/portrait.webp`, `public/og-image.png` (1200×630), `public/cv.pdf`. `public/images/work-placeholder.svg` removed.
 
 ---
 
@@ -298,7 +210,10 @@ Done outside this repo, in `criworks/criworks-web`:
 - First three landings (e.g. hiring managers, CTOs, agencies) in ES and EN.
 - Domain, `@astrojs/sitemap`, `robots.txt`, static deploy (Cloudflare Pages or Vercel) with branch previews.
 
-Changes needed in this repo while doing it (new options, fixes) are made here first, then pulled into the site.
+Changes needed in this repo while doing it (new options, fixes) are made here first, then pulled into the site. So far:
+- `site.heroFocusX` — which part of the wide hero image stays centered on phones.
+- `styles/base/reset.css` moved into `@layer base`; unlayered, its `img { max-width: 100% }` beat Tailwind's `max-w-none` and squashed the hero image to the viewport width.
+- `@astrojs/sitemap` (with hreflang alternates) and a `robots.txt` endpoint, both from `site.url`; `trailingSlash: 'never'` so sitemap URLs match the canonical links.
 
 ---
 

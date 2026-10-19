@@ -1,10 +1,10 @@
 import type { Profile } from '@/data'
 
-// DEMO PROFILE — a landing for agencies looking for a design partner.
+// Freelance: agencies looking for a design partner per project.
 export default {
   slug: 'freelance/agency',
   audience: 'Agencies that need senior design capacity per project.',
-  sections: ['hero', 'work', 'about', 'contact'],
+  sections: ['hero', 'statement', 'services', 'work', 'about', 'contact'],
   content: {
     es: {
       hero: {
@@ -21,14 +21,13 @@ export default {
       contact: { cta: 'Book a call' },
     },
   },
-  projects: ['brand-refresh', 'fintech-dashboard'],
   seo: {
     es: {
-      title: 'Tu Nombre — Diseño para agencias',
+      title: 'Cri Works — Diseño para agencias',
       description: 'Diseño de producto y marca para agencias, por proyecto.',
     },
     en: {
-      title: 'Your Name — Design for agencies',
+      title: 'Cri Works — Design for agencies',
       description: 'Product and brand design for agencies, per project.',
     },
   },

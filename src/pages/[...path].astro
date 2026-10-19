@@ -1,16 +1,19 @@
 ---
 // One route for every page: the home and each profile, in every locale.
-// Phase 3 placeholder: prints the resolved copy and sections. Real layout
-// and sections arrive in Phases 4–6.
+// The Hero always comes first; the rest follow the profile's `sections`.
 import type { GetStaticPaths } from 'astro'
-import { ThemeStyle } from '@/components'
+import { Image } from 'astro:assets'
+import heroBg from '@/assets/images/hero-bg.webp'
+import { NavDrawer } from '@/components/composed'
+import { Toast } from '@/components/ui'
 import { content, homeSections, locales, site } from '@/config'
 import type { SectionName } from '@/config'
 import type { IntroMode, Locale, Profile } from '@/data'
 import { projects } from '@/data'
 import { localizedPath, resolveContent, selectProjects } from '@/lib'
 import { profiles } from '@/profiles'
-import '@/styles/global.css'
+import { BaseLayout } from '@/layouts'
+import { About, Contact, Hero, Proof, Services, Statement, Work } from '@/sections'
 
 export const getStaticPaths = (() =>
   locales.flatMap(locale => [
@@ -32,39 +35,57 @@ const seo = profile?.seo[locale] ?? copy.seo
 const sections: readonly SectionName[] = profile?.sections ?? homeSections
 const featured = selectProjects(projects, profile?.projects)
 const intro: IntroMode = profile?.intro ?? site.defaultIntro
-const otherLocale = locales.find(l => l !== locale) ?? locale
+const languages = locales
+  .filter(l => l !== locale)
+  .map(l => ({ label: content[l].ui.languageName, href: localizedPath(l, profile?.slug), locale: l }))
+
+// Work anchor for the Proof button: this page's Work section, else the home's.
+const workHref = sections.includes('work') ? '#work' : `${localizedPath(locale)}#work`
 ---
 
-<html lang={locale}>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{seo.title}</title>
-    <meta name="description" content={seo.description} />
-    <ThemeStyle />
-  </head>
-  <body class="min-h-dvh bg-background p-8 font-sans text-foreground">
-    <main class="mx-auto flex max-w-3xl flex-col gap-6">
-      <h1 class="text-4xl font-semibold">{copy.hero.title}</h1>
-      <p class="text-muted">{copy.hero.subtitle}</p>
-      <dl class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
-        <dt class="text-muted">Profile</dt>
-        <dd>{profile?.slug ?? 'home'}</dd>
-        <dt class="text-muted">Sections</dt>
-        <dd>{sections.join(' → ')}</dd>
-        <dt class="text-muted">Projects</dt>
-        <dd>{featured.map(p => p.title[locale]).join(', ')}</dd>
-        <dt class="text-muted">Intro</dt>
-        <dd>{intro}</dd>
-      </dl>
-      <nav class="flex flex-wrap gap-4 text-accent">
-        <a href={localizedPath(otherLocale, profile?.slug)}>{copy.ui.switchLanguage}</a>
-        {profile && <a href={localizedPath(locale)}>{copy.ui.backToHome}</a>}
-        {
-          !profile &&
-            profiles.map(p => <a href={localizedPath(locale, p.slug)}>{p.seo[locale].title}</a>)
-        }
-      </nav>
-    </main>
-  </body>
-</html>
+<BaseLayout title={seo.title} description={seo.description} locale={locale} path={profile?.slug}>
+  <!-- Fixed background: pans and blurs as the page scrolls (Hero.anim.ts).
+       Eager and high priority because it is the LCP element. On phones the
+       wrapper centers site.heroFocusX; it is a separate element because GSAP
+       folds an element's own CSS `translate` into its transform. -->
+  <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
+    <div
+      class="max-mobile:absolute max-mobile:left-1/2 max-mobile:[translate:calc(var(--hero-focus)*-100%)_0]"
+      style={`--hero-focus: ${site.heroFocusX ?? 0.5}`}
+    >
+      <Image
+        src={heroBg}
+        alt=""
+        widths={[1800, 3600]}
+        sizes="300vh"
+        loading="eager"
+        fetchpriority="high"
+        class="block h-dvh w-auto max-w-none origin-left"
+        data-animate="hero-bg"
+      />
+    </div>
+    <div class="absolute inset-0 bg-linear-to-t from-background/70 via-background/20 to-transparent"></div>
+  </div>
+  <div class="pointer-events-none fixed inset-0 z-10" data-animate="intro-backdrop" aria-hidden="true"></div>
+
+  <main class="relative z-20">
+    <Hero copy={copy} languages={languages} intro={intro} />
+    {
+      sections.map(name => (
+        <Fragment>
+          {name === 'statement' && <Statement copy={copy.statement} />}
+          {name === 'proof' && (
+            <Proof copy={copy.proof} viewWorkLabel={copy.ui.viewWork} downloadCvLabel={copy.ui.downloadCv} workHref={workHref} />
+          )}
+          {name === 'services' && <Services copy={copy.services} />}
+          {name === 'work' && <Work copy={copy.work} projects={featured} locale={locale} viewProjectLabel={copy.ui.viewProject} />}
+          {name === 'about' && <About copy={copy.about} />}
+          {name === 'contact' && <Contact copy={copy.contact} copyEmailLabel={copy.ui.copyEmail} copiedMessage={copy.ui.emailCopied} />}
+        </Fragment>
+      ))
+    }
+  </main>
+
+  <NavDrawer items={[...copy.nav, ...languages]} closeLabel={copy.ui.closeMenu} navLabel={copy.ui.mainNavigation} />
+  <Toast />
+</BaseLayout>

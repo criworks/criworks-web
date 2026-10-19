@@ -1,6 +1,6 @@
 import type { Profile } from '@/data'
 
-// DEMO PROFILE — a landing for people hiring for a role.
+// Contractor: recruiters and hiring managers screening candidates fast.
 export default {
   slug: 'contractor/hiring-manager',
   audience: 'Recruiters and hiring managers screening candidates quickly.',
@@ -8,25 +8,26 @@ export default {
   content: {
     es: {
       hero: {
-        title: 'Diseñador de producto senior, disponible para tu equipo',
+        title: 'Product Designer senior, disponible para tu equipo',
         cta: 'Descargar CV',
+        ctaHref: '/cv.pdf',
       },
     },
     en: {
       hero: {
-        title: 'Senior product designer, available for your team',
+        title: 'Senior Product Designer, available for your team',
         cta: 'Download CV',
+        ctaHref: '/cv.pdf',
       },
     },
   },
-  projects: ['fintech-dashboard', 'ai-assistant'],
   seo: {
     es: {
-      title: 'Tu Nombre — Diseñador de producto senior',
+      title: 'Cri Works — Product Designer senior',
       description: 'Experiencia, disponibilidad y trabajo seleccionado en 10 segundos.',
     },
     en: {
-      title: 'Your Name — Senior product designer',
+      title: 'Cri Works — Senior Product Designer',
       description: 'Experience, availability, and selected work in 10 seconds.',
     },
   },
