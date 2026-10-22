@@ -3,8 +3,9 @@ import type { Palette, Typography } from '@/data'
 // BUYER: pick a palette with `activePalette`, or add your own to PALETTES.
 // ThemeStyle turns the active one into CSS variables (--color-*).
 export const PALETTES = {
-  // cri.works — matches the `theme` variables in the Figma file (color/*).
-  'cri-works': {
+  // The template's default theme: cri.works, matching the `theme` variables
+  // in the Figma file (color/*). Copy it as a base for your own palette.
+  default: {
     bg: '#000000',
     fg: '#ffffff',
     accent: '#23c0cf',
@@ -48,7 +49,7 @@ export const PALETTES = {
 
 export type PaletteName = keyof typeof PALETTES
 
-export const activePaletteName: PaletteName = 'cri-works'
+export const activePaletteName: PaletteName = 'default'
 export const activePalette: Palette = PALETTES[activePaletteName]
 
 // BUYER: to change the font, replace the files in public/fonts/, update
