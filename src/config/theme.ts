@@ -3,6 +3,15 @@ import type { Palette, Typography } from '@/data'
 // BUYER: pick a palette with `activePalette`, or add your own to PALETTES.
 // ThemeStyle turns the active one into CSS variables (--color-*).
 export const PALETTES = {
+  // cri.works — matches the `theme` variables in the Figma file (color/*).
+  'cri-works': {
+    bg: '#000000',
+    fg: '#ffffff',
+    accent: '#23c0cf',
+    accentDark: '#2c566a',
+    muted: 'rgba(255, 255, 255, 0.7)',
+    border: 'rgba(255, 255, 255, 0.1)',
+  },
   'teal-dark': {
     bg: '#000000',
     fg: '#ffffff',
@@ -39,7 +48,7 @@ export const PALETTES = {
 
 export type PaletteName = keyof typeof PALETTES
 
-export const activePaletteName: PaletteName = 'teal-dark'
+export const activePaletteName: PaletteName = 'cri-works'
 export const activePalette: Palette = PALETTES[activePaletteName]
 
 // BUYER: to change the font, replace the files in public/fonts/, update
