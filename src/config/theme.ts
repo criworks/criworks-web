@@ -10,7 +10,7 @@ export const PALETTES = {
     fg: '#ffffff',
     accent: '#23c0cf',
     accentDark: '#2c566a',
-    muted: 'rgba(255, 255, 255, 0.7)',
+    muted: '#5F6783',
     border: 'rgba(255, 255, 255, 0.1)',
   },
   'teal-dark': {
