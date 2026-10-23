@@ -2,7 +2,8 @@
 // One view of an ActionsContainer: its items centered, 10px apart. The
 // `default` panel shows first; the others stay hidden until a ToolbarSelect
 // opens them (give them the id it `controls`). With `scroll` each item keeps
-// the 281px of the design and the row scrolls sideways when they don't fit.
+// the 281px of the design and the row spans the viewport, wider than the
+// column: centered when the items fit, scrolling sideways when they don't.
 interface Props {
   id?: string
   default?: boolean
@@ -17,8 +18,10 @@ const { id, default: isDefault = false, scroll = false } = Astro.props
   data-actions-panel={isDefault ? 'default' : ''}
   hidden={!isDefault}
   class:list={[
-    'w-full items-start justify-center-safe gap-2.5 [&:not([hidden])]:flex',
-    scroll && 'snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] *:w-70.25 *:flex-none *:snap-start',
+    'items-start justify-center-safe gap-2.5 [&:not([hidden])]:flex',
+    !scroll && 'w-full',
+    scroll &&
+      'relative left-1/2 w-dvw flex-none -translate-x-1/2 snap-x snap-mandatory scroll-px-4 overflow-x-auto px-4 [scrollbar-width:none] *:w-70.25 *:flex-none *:snap-start',
   ]}
 >
   <slot />

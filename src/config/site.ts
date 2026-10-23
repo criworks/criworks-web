@@ -7,8 +7,8 @@ export const site = {
   url: 'https://www.cri.works',
   ogImage: '/og-image.png',
   social: [
-    { label: 'LinkedIn', href: 'https://linkedin.com/in/criworks', icon: 'linkedin' },
     { label: 'GitHub', href: 'https://github.com/criworks', icon: 'github' },
+    { label: 'LinkedIn', href: 'https://linkedin.com/in/criworks', icon: 'linkedin' },
     { label: 'Instagram', href: 'https://instagram.com/cri.works', icon: 'instagram' },
   ],
   defaultIntro: 'subtle',
