@@ -1,16 +1,19 @@
 ---
 // Icon-only toolbar item, same hover as the select. A link with `href`,
-// a button otherwise; `label` is its accessible name. Other attributes
+// a button otherwise; `label` is its accessible name. With `controls` it
+// opens and closes that ActionsPanel like a ToolbarSelect. Other attributes
 // (target, rel, data-*) pass through. The icon goes in the default slot.
 interface Props {
   label: string
   href?: string
+  /** id of the ActionsPanel this button opens. */
+  controls?: string
   target?: string
   rel?: string
   [attr: `data-${string}`]: string | undefined
 }
 
-const { label, href, ...attrs } = Astro.props
+const { label, href, controls, ...attrs } = Astro.props
 const Tag = href ? 'a' : 'button'
 ---
 
@@ -18,10 +21,18 @@ const Tag = href ? 'a' : 'button'
   href={href}
   type={href ? undefined : 'button'}
   aria-label={label}
-  class="flex cursor-pointer items-center rounded-full px-2 py-1.5 text-white transition-colors hover:bg-white/10"
+  aria-controls={controls}
+  aria-expanded={controls ? 'false' : undefined}
+  data-toolbar-toggle={controls ? '' : undefined}
+  class="flex cursor-pointer items-center rounded-full px-2 py-1.5 text-white transition-colors hover:bg-white/10 aria-expanded:bg-white/10"
   {...attrs}
 >
   <span class="flex size-4.5 items-center justify-center" aria-hidden="true">
     <slot />
   </span>
 </Tag>
+
+<script>
+  import { bindToolbarToggles } from './toolbar'
+  bindToolbarToggles()
+</script>

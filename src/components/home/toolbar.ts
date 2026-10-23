@@ -5,25 +5,39 @@ function showPanel(container: Element, panel: HTMLElement | null): void {
   })
 }
 
+/** The ActionsPanel a toggle opens, and the ActionsContainer it lives in. */
+function target(btn: HTMLElement): { panel: HTMLElement; container: HTMLElement } | null {
+  const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '')
+  const container = panel?.parentElement
+  return panel && container ? { panel, container } : null
+}
+
 /**
- * Wires every ToolbarSelect: toggling it swaps its ActionsPanel in and out of
- * the ActionsContainer. Escape closes it. Safe to call more than once.
+ * Wires every toolbar toggle (ToolbarSelect, ToolbarIconButton with
+ * `controls`): opening one swaps its ActionsPanel into the ActionsContainer
+ * and closes the other toggles of that container; closing it brings back the
+ * default panel. Escape closes it. Safe to call more than once.
  */
-export function bindToolbarSelects(): void {
-  document.querySelectorAll<HTMLButtonElement>('[data-toolbar-select]:not([data-bound])').forEach(btn => {
-    btn.dataset.bound = ''
-    const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '')
-    const container = panel?.parentElement
-    if (!panel || !container) return
+export function bindToolbarToggles(): void {
+  const toggles = [...document.querySelectorAll<HTMLElement>('[data-toolbar-toggle]')]
 
-    const set = (open: boolean) => {
-      btn.setAttribute('aria-expanded', String(open))
-      showPanel(container, open ? panel : null)
-    }
+  toggles
+    .filter(btn => btn.dataset.bound === undefined)
+    .forEach(btn => {
+      btn.dataset.bound = ''
+      const own = target(btn)
+      if (!own) return
 
-    btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'))
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') set(false)
+      const set = (open: boolean) => {
+        toggles.forEach(other => {
+          if (target(other)?.container === own.container) other.setAttribute('aria-expanded', String(open && other === btn))
+        })
+        showPanel(own.container, open ? own.panel : null)
+      }
+
+      btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'))
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') set(false)
+      })
     })
-  })
 }

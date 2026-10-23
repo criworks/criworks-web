@@ -19,7 +19,7 @@ const { label, controls } = Astro.props
 
 <button
   type="button"
-  data-toolbar-select
+  data-toolbar-toggle
   aria-expanded="false"
   aria-controls={controls}
   class="flex w-full cursor-pointer items-center gap-0.5 rounded-full px-2 py-1.5 text-xs leading-[18px] tracking-[-0.078px] text-white transition-colors hover:bg-white/10 aria-expanded:bg-white/10"
@@ -32,6 +32,6 @@ const { label, controls } = Astro.props
 </button>
 
 <script>
-  import { bindToolbarSelects } from './toolbar'
-  bindToolbarSelects()
+  import { bindToolbarToggles } from './toolbar'
+  bindToolbarToggles()
 </script>
