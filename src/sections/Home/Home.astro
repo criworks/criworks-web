@@ -70,7 +70,17 @@ const optionIcons = [MonitorSmartphone, FileText]
 
     <ActionsContainer class="mt-4" data-animate="home-item">
       <ActionsPanel default>
-        <Card title={home.cta.title} subtitle={home.cta.subtitle} badge={home.cta.badge} as="a" data-mailto data-u={user} data-d={domain}>
+        <Card
+          title={home.cta.title}
+          subtitle={home.cta.subtitle}
+          badge={home.cta.badge}
+          as="button"
+          data-email-button
+          data-u={user}
+          data-d={domain}
+          data-copy-label={copy.ui.copyEmail}
+          data-copied={copy.ui.emailCopied}
+        >
           <Mail slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
         </Card>
       </ActionsPanel>
@@ -121,7 +131,7 @@ const optionIcons = [MonitorSmartphone, FileText]
 </section>
 
 <script>
-  import { bindEmailButtons, bindMailtoLinks } from '@/lib/email'
+  import { bindEmailButtons } from '@/lib/email'
   import { initGsap } from '@/lib/gsap'
   import { INTRO_SEEN_KEY, shouldPlayEntrance } from '@/lib/intro'
   import { prefersReducedMotion } from '@/lib/motion'
@@ -130,7 +140,6 @@ const optionIcons = [MonitorSmartphone, FileText]
   import { createHomeEntrance, setHomeFinal } from './Home.anim'
 
   bindEmailButtons()
-  bindMailtoLinks()
 
   const home = document.getElementById('home')
 
