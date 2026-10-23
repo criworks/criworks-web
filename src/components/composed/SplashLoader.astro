@@ -1,0 +1,100 @@
+---
+// Home loader: a pill with a progress ring and percentage, over the back
+// portrait. On exit the pill leaves and the splash fades, uncovering the
+// home's own portrait in the same place. Shown only while the home entrance
+// will play (styles/animations/splash.css), so it follows the `intro` rules:
+// 'subtle' once per session, 'full' every visit, never with reduced motion
+// or without JS. The entrance waits for it to leave (whenSplashDone in lib/splash.ts).
+import type { IntroMode } from '@/data'
+import { SPLASH } from '@/lib/splash'
+import BackPortrait from './BackPortrait.astro'
+
+interface Props {
+  /** Label before the percentage, e.g. 'Cargando...'. */
+  label: string
+  intro: IntroMode
+}
+
+const { label, intro } = Astro.props
+---
+
+<div
+  id="splash-loader"
+  aria-hidden="true"
+  data-intro-mode={intro}
+  class="fixed inset-0 z-splash items-start justify-center overflow-hidden bg-background"
+>
+  <!-- Pill — adjust mt-65 to move it vertically -->
+  <div id="splash-pill" class="relative z-1 mt-65 flex items-center gap-1.5 rounded-full bg-foreground/10 py-2 pr-3 pl-2">
+    <svg class="size-5 shrink-0" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="10" cy="10" r="8" class="stroke-accent" stroke-width="2" stroke-opacity="0.25"></circle>
+      <!-- Progress arc: clockwise from the top, driven by stroke-dashoffset -->
+      <circle
+        id="splash-arc"
+        cx="10"
+        cy="10"
+        r="8"
+        class="stroke-accent"
+        stroke-width="2"
+        stroke-linecap="round"
+        transform="rotate(-90 10 10)"
+        stroke-dasharray={SPLASH.CIRCUMFERENCE}
+        stroke-dashoffset={SPLASH.CIRCUMFERENCE}></circle>
+    </svg>
+    <span class="text-base leading-none font-medium whitespace-nowrap text-accent">
+      {label} <span id="splash-pct">0</span>%
+    </span>
+  </div>
+
+  <!-- Same spot as the home's portrait, so it stays put when the splash fades -->
+  <BackPortrait />
+</div>
+
+<script>
+  import { initGsap } from '@/lib/gsap'
+  import { SPLASH, SPLASH_DONE_EVENT, splashProgress } from '@/lib/splash'
+
+  const splash = document.getElementById('splash-loader')
+  const arc = document.getElementById('splash-arc')
+  const pct = document.getElementById('splash-pct')
+  const pill = document.getElementById('splash-pill')
+  const root = document.documentElement
+
+  function finish(): void {
+    splash?.remove()
+    root.style.removeProperty('overflow')
+    document.dispatchEvent(new Event(SPLASH_DONE_EVENT))
+  }
+
+  if (!splash || getComputedStyle(splash).display === 'none' || !arc || !pct || !pill) {
+    finish()
+  } else {
+    const gsap = initGsap()
+    const startedAt = performance.now()
+    let loadedAt: number | null = null
+    root.style.overflow = 'hidden'
+
+    const exit = () => {
+      gsap
+        .timeline({ onComplete: finish })
+        .to(pill, { y: -64, opacity: 0, duration: 0.45, ease: 'power3.in' })
+        .to(splash, { opacity: 0, duration: 0.4, ease: 'power1.inOut' }, '-=0.1')
+    }
+
+    const tick = (now: number) => {
+      const progress = splashProgress(now - startedAt, loadedAt === null ? null : now - loadedAt)
+      arc.style.strokeDashoffset = String(SPLASH.CIRCUMFERENCE * (1 - progress / 100))
+      pct.textContent = String(Math.round(progress))
+      if (progress < 100) requestAnimationFrame(tick)
+      else exit()
+    }
+    requestAnimationFrame(tick)
+
+    const markLoaded = () => {
+      const wait = Math.max(0, SPLASH.MIN_MS - (performance.now() - startedAt))
+      setTimeout(() => (loadedAt ??= performance.now()), wait)
+    }
+    if (document.readyState === 'complete') markLoaded()
+    else window.addEventListener('load', markLoaded, { once: true })
+  }
+</script>

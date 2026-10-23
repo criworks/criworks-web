@@ -1,10 +1,11 @@
 ---
 // One route for every page: the home and each profile, in every locale.
-// The Hero always comes first; the rest follow the profile's `sections`.
+// The home is its own one-screen design (sections/Home) behind the splash
+// loader. On profiles the Hero comes first and the rest follow `sections`.
 import type { GetStaticPaths } from 'astro'
 import { Image } from 'astro:assets'
 import heroBg from '@/assets/images/hero-bg.webp'
-import { NavDrawer } from '@/components/composed'
+import { NavDrawer, SplashLoader } from '@/components/composed'
 import { Toast } from '@/components/ui'
 import { content, homeSections, locales, site } from '@/config'
 import type { SectionName } from '@/config'
@@ -13,7 +14,7 @@ import { projects } from '@/data'
 import { localizedPath, resolveContent, selectProjects } from '@/lib'
 import { profiles } from '@/profiles'
 import { BaseLayout } from '@/layouts'
-import { About, Contact, Hero, Proof, Services, Statement, Work } from '@/sections'
+import { About, Contact, Hero, Home, Proof, Services, Statement, Work } from '@/sections'
 
 export const getStaticPaths = (() =>
   locales.flatMap(locale => [
@@ -52,48 +53,62 @@ const workHref = !hasWork
 ---
 
 <BaseLayout title={seo.title} description={seo.description} locale={locale} path={profile?.slug}>
-  <!-- Fixed background: pans and blurs as the page scrolls (Hero.anim.ts).
-       Eager and high priority because it is the LCP element. On phones the
-       wrapper centers site.heroFocusX; it is a separate element because GSAP
-       folds an element's own CSS `translate` into its transform. -->
-  <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
-    <div
-      class="max-mobile:absolute max-mobile:left-1/2 max-mobile:[translate:calc(var(--hero-focus)*-100%)_0]"
-      style={`--hero-focus: ${site.heroFocusX ?? 0.5}`}
-    >
-      <Image
-        src={heroBg}
-        alt=""
-        widths={[1800, 3600]}
-        sizes="300vh"
-        loading="eager"
-        fetchpriority="high"
-        class="block h-dvh w-auto max-w-none origin-left"
-        data-animate="hero-bg"
-      />
-    </div>
-    <div class="absolute inset-0 bg-linear-to-t from-background/70 via-background/20 to-transparent"></div>
-  </div>
-  <div class="pointer-events-none fixed inset-0 z-10" data-animate="intro-backdrop" aria-hidden="true"></div>
+  {
+    !profile ? (
+      <Fragment>
+        {intro !== 'none' && <SplashLoader label={copy.ui.loading} intro={intro} />}
+        <main>
+          <Home copy={copy} locale={locale} intro={intro} />
+        </main>
+        <Toast />
+      </Fragment>
+    ) : (
+      <Fragment>
+        {/* Fixed background: pans and blurs as the page scrolls (Hero.anim.ts).
+            Eager and high priority because it is the LCP element. On phones the
+            wrapper centers site.heroFocusX; it is a separate element because GSAP
+            folds an element's own CSS `translate` into its transform. */}
+        <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
+          <div
+            class="max-mobile:absolute max-mobile:left-1/2 max-mobile:[translate:calc(var(--hero-focus)*-100%)_0]"
+            style={`--hero-focus: ${site.heroFocusX ?? 0.5}`}
+          >
+            <Image
+              src={heroBg}
+              alt=""
+              widths={[1800, 3600]}
+              sizes="300vh"
+              loading="eager"
+              fetchpriority="high"
+              class="block h-dvh w-auto max-w-none origin-left"
+              data-animate="hero-bg"
+            />
+          </div>
+          <div class="absolute inset-0 bg-linear-to-t from-background/70 via-background/20 to-transparent"></div>
+        </div>
+        <div class="pointer-events-none fixed inset-0 z-10" data-animate="intro-backdrop" aria-hidden="true"></div>
 
-  <main class="relative z-20">
-    <Hero copy={copy} languages={languages} intro={intro} />
-    {
-      sections.map(name => (
-        <Fragment>
-          {name === 'statement' && <Statement copy={copy.statement} />}
-          {name === 'proof' && (
-            <Proof copy={copy.proof} viewWorkLabel={copy.ui.viewWork} downloadCvLabel={copy.ui.downloadCv} workHref={workHref} />
-          )}
-          {name === 'services' && <Services copy={copy.services} />}
-          {name === 'work' && hasWork && <Work copy={copy.work} projects={featured} locale={locale} viewProjectLabel={copy.ui.viewProject} />}
-          {name === 'about' && <About copy={copy.about} />}
-          {name === 'contact' && <Contact copy={copy.contact} copyEmailLabel={copy.ui.copyEmail} copiedMessage={copy.ui.emailCopied} />}
-        </Fragment>
-      ))
-    }
-  </main>
+        <main class="relative z-20">
+          <Hero copy={copy} languages={languages} intro={intro} />
+          {
+            sections.map(name => (
+              <Fragment>
+                {name === 'statement' && <Statement copy={copy.statement} />}
+                {name === 'proof' && (
+                  <Proof copy={copy.proof} viewWorkLabel={copy.ui.viewWork} downloadCvLabel={copy.ui.downloadCv} workHref={workHref} />
+                )}
+                {name === 'services' && <Services copy={copy.services} />}
+                {name === 'work' && hasWork && <Work copy={copy.work} projects={featured} locale={locale} viewProjectLabel={copy.ui.viewProject} />}
+                {name === 'about' && <About copy={copy.about} />}
+                {name === 'contact' && <Contact copy={copy.contact} copyEmailLabel={copy.ui.copyEmail} copiedMessage={copy.ui.emailCopied} />}
+              </Fragment>
+            ))
+          }
+        </main>
 
-  <NavDrawer items={[...copy.nav, ...languages]} closeLabel={copy.ui.closeMenu} navLabel={copy.ui.mainNavigation} />
-  <Toast />
+        <NavDrawer items={[...copy.nav, ...languages]} closeLabel={copy.ui.closeMenu} navLabel={copy.ui.mainNavigation} />
+        <Toast />
+      </Fragment>
+    )
+  }
 </BaseLayout>

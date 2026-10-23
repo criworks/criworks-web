@@ -13,7 +13,13 @@ export type DeepPartial<T> = T extends readonly unknown[]
     : T
 
 export interface NavItem { readonly label: string; readonly href: string }
-export interface SocialLink { readonly label: string; readonly href: string }
+export type SocialIcon = 'github' | 'linkedin' | 'instagram' | 'dribbble'
+export interface SocialLink {
+  readonly label: string
+  readonly href: string
+  /** Icon for icon-only buttons (the home). */
+  readonly icon: SocialIcon
+}
 
 export interface SeoContent { readonly title: string; readonly description: string }
 export interface HeroContent {
@@ -64,6 +70,24 @@ export interface ServicesContent extends SectionContent {
   /** Steps of the process, in order. */
   readonly steps: readonly ServiceItem[]
 }
+/** The home: one screen over the back portrait. */
+export interface HomeContent {
+  readonly role: string
+  /** Two lines, shown one under the other. */
+  readonly tagline: readonly string[]
+  /** `path` has no locale prefix; the page adds it. */
+  readonly presentation: { readonly label: string; readonly path: string }
+  /** Accessible name of the availability dot; also its tooltip. */
+  readonly availability: string
+  readonly cta: {
+    readonly title: string
+    readonly subtitle: string
+    /** Small label at the corner, notification style. */
+    readonly badge: string
+  }
+  readonly footer: string
+  readonly socialLabel: string
+}
 export interface ContactContent { readonly title: string; readonly tagline: string; readonly cta: string }
 export interface UIStrings {
   readonly emailCopied: string
@@ -83,6 +107,8 @@ export interface UIStrings {
   readonly allWork: string
   readonly year: string
   readonly tags: string
+  /** Splash loader label, followed by the percentage. */
+  readonly loading: string
 }
 
 export interface Content {
@@ -95,6 +121,7 @@ export interface Content {
   readonly work: SectionContent
   readonly about: AboutContent
   readonly contact: ContactContent
+  readonly home: HomeContent
   readonly ui: UIStrings
 }
 

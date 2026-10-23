@@ -24,3 +24,13 @@ export function bindEmailButtons(): void {
     })
   })
 }
+
+/**
+ * Points every `[data-mailto]` link at the address split into data-u and
+ * data-d, so it never appears in the HTML. Safe to call more than once.
+ */
+export function bindMailtoLinks(): void {
+  document.querySelectorAll<HTMLAnchorElement>('a[data-mailto]:not([href])').forEach(link => {
+    link.href = `mailto:${link.dataset.u ?? ''}@${link.dataset.d ?? ''}`
+  })
+}

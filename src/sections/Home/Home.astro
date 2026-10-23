@@ -1,0 +1,129 @@
+---
+// The home: one screen, no scroll. Name, role and tagline, a row of actions
+// and a contact card at the top; the back portrait stays at the bottom center,
+// where the splash loader leaves it. Content is server-rendered and readable
+// before JS: hero-initial.css only dims it and Home.anim.ts lifts it.
+import { CodeXml, Mail } from '@lucide/astro'
+import { BackPortrait } from '@/components/composed'
+import { BrandIcon, EmailButton } from '@/components/ui'
+import { site } from '@/config'
+import type { Content, IntroMode, Locale } from '@/data'
+import { localizedPath } from '@/lib/i18n'
+
+interface Props {
+  copy: Content
+  locale: Locale
+  intro: IntroMode
+}
+
+const { copy, locale, intro } = Astro.props
+const { home } = copy
+const [user, domain] = site.email.split('@')
+const pill = 'flex h-9.5 items-center rounded-full bg-foreground/10 transition-colors hover:bg-foreground/15'
+---
+
+<section id="home" class="relative flex h-dvh flex-col overflow-hidden px-4" data-intro-mode={intro}>
+  <BackPortrait class="z-0" />
+
+  <div class="relative z-10 mx-auto flex w-full max-w-94 flex-col pt-9">
+    <div data-animate="home-item">
+      <h1 class="text-lg leading-tight font-semibold">{site.name}</h1>
+      <p class="mt-1 text-sm text-accent">{home.role}</p>
+    </div>
+
+    <p class="mt-4 text-base leading-snug text-muted" data-animate="home-item">
+      {home.tagline.map(line => <span class="block">{line}</span>)}
+    </p>
+
+    <div class="mt-8 flex items-center gap-2.5" data-animate="home-item">
+      <a href={localizedPath(locale, home.presentation.path)} class:list={[pill, 'min-w-0 flex-1 justify-between gap-3 px-3 text-sm']}>
+        {home.presentation.label}
+        <CodeXml size={14} class="shrink-0" aria-hidden="true" />
+      </a>
+      <EmailButton email={site.email} label={copy.ui.email} copyLabel={copy.ui.copyEmail} copiedMessage={copy.ui.emailCopied} variant="icon" />
+      <ul class="flex h-9.5 shrink-0 items-center gap-0.5 rounded-full bg-foreground/10 px-1.5" aria-label={home.socialLabel}>
+        {
+          site.social.map(link => (
+            <li>
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={link.label}
+                class="flex size-7 items-center justify-center rounded-full transition-colors hover:bg-foreground/10"
+              >
+                <BrandIcon name={link.icon} size={14} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <span class="flex size-9.5 shrink-0 items-center justify-center rounded-full bg-foreground/10" role="img" aria-label={home.availability} title={home.availability}>
+        <span class="size-4.5 rounded-full bg-accent"></span>
+      </span>
+    </div>
+
+    <a
+      data-mailto
+      data-u={user}
+      data-d={domain}
+      class="mt-4 flex items-start gap-3 rounded-2xl bg-foreground/10 p-3 transition-colors hover:bg-foreground/15"
+      data-animate="home-item"
+    >
+      <span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-background" aria-hidden="true">
+        <Mail size={16} />
+      </span>
+      <span class="flex min-w-0 flex-1 flex-col gap-0.5 pt-0.5">
+        <span class="text-sm font-medium">{home.cta.title}</span>
+        <span class="text-sm text-muted">{home.cta.subtitle}</span>
+      </span>
+      <span class="text-xs text-muted">{home.cta.badge}</span>
+    </a>
+  </div>
+
+  <footer class="relative z-10 mt-auto pb-10 text-center text-xs text-muted" data-animate="home-item">
+    © {site.name}. {home.footer}
+  </footer>
+</section>
+
+<script>
+  import { bindMailtoLinks } from '@/lib/email'
+  import { initGsap } from '@/lib/gsap'
+  import { INTRO_SEEN_KEY, shouldPlayEntrance } from '@/lib/intro'
+  import { prefersReducedMotion } from '@/lib/motion'
+  import { whenSplashDone } from '@/lib/splash'
+  import type { IntroMode } from '@/data'
+  import { createHomeEntrance, setHomeFinal } from './Home.anim'
+
+  bindMailtoLinks()
+
+  const home = document.getElementById('home')
+
+  function readSeen(): boolean {
+    try {
+      return sessionStorage.getItem(INTRO_SEEN_KEY) === '1'
+    } catch {
+      return false
+    }
+  }
+
+  function markSeen(): void {
+    try {
+      sessionStorage.setItem(INTRO_SEEN_KEY, '1')
+    } catch {
+      // Storage blocked (private mode): the entrance just plays again.
+    }
+  }
+
+  if (home && !prefersReducedMotion()) {
+    const gsap = initGsap()
+    const mode = (home.dataset.introMode ?? 'subtle') as IntroMode
+
+    if (shouldPlayEntrance(mode, readSeen(), false)) {
+      markSeen()
+      void whenSplashDone().then(() => createHomeEntrance(gsap))
+    } else {
+      setHomeFinal(gsap)
+    }
+  }
+</script>

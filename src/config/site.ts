@@ -7,9 +7,9 @@ export const site = {
   url: 'https://www.cri.works',
   ogImage: '/og-image.png',
   social: [
-    { label: 'LinkedIn', href: 'https://linkedin.com/in/criworks' },
-    { label: 'GitHub', href: 'https://github.com/criworks' },
-    { label: 'Instagram', href: 'https://instagram.com/cri.works' },
+    { label: 'LinkedIn', href: 'https://linkedin.com/in/criworks', icon: 'linkedin' },
+    { label: 'GitHub', href: 'https://github.com/criworks', icon: 'github' },
+    { label: 'Instagram', href: 'https://instagram.com/cri.works', icon: 'instagram' },
   ],
   defaultIntro: 'subtle',
   // The portrait sits at 42% of hero-bg.webp.

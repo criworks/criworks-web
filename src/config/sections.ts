@@ -6,6 +6,7 @@ export const sectionNames = ['hero', 'statement', 'proof', 'services', 'work', '
 
 export type SectionName = (typeof sectionNames)[number]
 
-// Sections and order for the home page. The home is only the Hero; the full
-// page it used to be lives on as the freelance/founder profile.
+// Sections the home counts as having, for links from the landings (the Proof
+// button's #work). The home itself renders its own one-screen design
+// (sections/Home); the full page it used to be lives on as freelance/founder.
 export const homeSections = ['hero'] as const satisfies readonly SectionName[]

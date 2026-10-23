@@ -70,6 +70,7 @@ const { copy, languages, intro } = Astro.props
   import { initGsap } from '@/lib/gsap'
   import { INTRO_SEEN_KEY, shouldPlayEntrance } from '@/lib/intro'
   import { prefersReducedMotion } from '@/lib/motion'
+  import { whenSplashDone } from '@/lib/splash'
   import type { IntroMode } from '@/data'
   import { createHeroEntrance, createHeroScroll, setHeroFinal } from './Hero.anim'
 
@@ -102,7 +103,10 @@ const { copy, languages, intro } = Astro.props
 
     if (shouldPlayEntrance(mode, readSeen(), false)) {
       markSeen()
-      createHeroEntrance(gsap, mode === 'full').eventCallback('onComplete', startScroll)
+      // On the home the splash loader covers the hero first; start once it leaves.
+      void whenSplashDone().then(() => {
+        createHeroEntrance(gsap, mode === 'full').eventCallback('onComplete', startScroll)
+      })
     } else {
       setHeroFinal(gsap)
       startScroll()
