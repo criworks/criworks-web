@@ -3,12 +3,21 @@
 // and a contact card at the top; the back portrait stays at the bottom center,
 // where the splash loader leaves it. Content is server-rendered and readable
 // before JS: hero-initial.css only dims it and Home.anim.ts lifts it.
-import { CodeXml, Mail } from '@lucide/astro'
+import { ArrowUpRight, Copy, FileText, Mail, MonitorSmartphone } from '@lucide/astro'
 import { BackPortrait } from '@/components/composed'
-import { BrandIcon, EmailButton } from '@/components/ui'
+import {
+  ActionsContainer,
+  ActionsPanel,
+  Card,
+  Toolbar,
+  ToolbarDot,
+  ToolbarGroup,
+  ToolbarIconButton,
+  ToolbarSelect,
+} from '@/components/home'
+import { BrandIcon } from '@/components/ui'
 import { site } from '@/config'
 import type { Content, IntroMode, Locale } from '@/data'
-import { localizedPath } from '@/lib/i18n'
 
 interface Props {
   copy: Content
@@ -16,10 +25,11 @@ interface Props {
   intro: IntroMode
 }
 
-const { copy, locale, intro } = Astro.props
+const { copy, intro } = Astro.props
 const { home } = copy
 const [user, domain] = site.email.split('@')
-const pill = 'flex h-9.5 items-center rounded-full bg-foreground/10 transition-colors hover:bg-foreground/15'
+// One icon per presentation option, in order (Consultor, Contractor).
+const optionIcons = [MonitorSmartphone, FileText]
 ---
 
 <section id="home" class="relative flex h-dvh flex-col overflow-hidden px-4" data-intro-mode={intro}>
@@ -35,50 +45,84 @@ const pill = 'flex h-9.5 items-center rounded-full bg-foreground/10 transition-c
       {home.tagline.map(line => <span class="block">{line}</span>)}
     </p>
 
-    <div class="mt-8 flex items-center gap-2.5" data-animate="home-item">
-      <a href={localizedPath(locale, home.presentation.path)} class:list={[pill, 'min-w-0 flex-1 justify-between gap-3 px-3 text-sm']}>
-        {home.presentation.label}
-        <CodeXml size={14} class="shrink-0" aria-hidden="true" />
-      </a>
-      <EmailButton email={site.email} label={copy.ui.email} copyLabel={copy.ui.copyEmail} copiedMessage={copy.ui.emailCopied} variant="icon" />
-      <ul class="flex h-9.5 shrink-0 items-center gap-0.5 rounded-full bg-foreground/10 px-1.5" aria-label={home.socialLabel}>
+    <Toolbar class="mt-8" data-animate="home-item">
+      <ToolbarGroup grow>
+        <ToolbarSelect label={home.presentation.label} controls="home-presentation" />
+      </ToolbarGroup>
+      <ToolbarGroup>
+        <ToolbarIconButton label={copy.ui.email} controls="home-email">
+          <Mail size={14} stroke-width={1} nonScalingStroke />
+        </ToolbarIconButton>
+      </ToolbarGroup>
+      <ToolbarGroup label={home.socialLabel}>
         {
           site.social.map(link => (
-            <li>
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.label}
-                class="flex size-7 items-center justify-center rounded-full transition-colors hover:bg-foreground/10"
-              >
-                <BrandIcon name={link.icon} size={14} />
-              </a>
-            </li>
+            <ToolbarIconButton label={link.label} controls={`home-social-${link.icon}`}>
+              <BrandIcon name={link.icon} size={14} />
+            </ToolbarIconButton>
           ))
         }
-      </ul>
-      <span class="flex size-9.5 shrink-0 items-center justify-center rounded-full bg-foreground/10" role="img" aria-label={home.availability} title={home.availability}>
-        <span class="size-4.5 rounded-full bg-accent"></span>
-      </span>
-    </div>
+      </ToolbarGroup>
+      <ToolbarGroup>
+        <ToolbarDot label={home.availability} />
+      </ToolbarGroup>
+    </Toolbar>
 
-    <a
-      data-mailto
-      data-u={user}
-      data-d={domain}
-      class="mt-4 flex items-start gap-3 rounded-2xl bg-foreground/10 p-3 transition-colors hover:bg-foreground/15"
-      data-animate="home-item"
-    >
-      <span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-background" aria-hidden="true">
-        <Mail size={16} />
-      </span>
-      <span class="flex min-w-0 flex-1 flex-col gap-0.5 pt-0.5">
-        <span class="text-sm font-medium">{home.cta.title}</span>
-        <span class="text-sm text-muted">{home.cta.subtitle}</span>
-      </span>
-      <span class="text-xs text-muted">{home.cta.badge}</span>
-    </a>
+    <ActionsContainer class="mt-4" data-animate="home-item">
+      <ActionsPanel default>
+        <Card
+          title={home.cta.title}
+          subtitle={home.cta.subtitle}
+          badge={home.cta.badge}
+          as="button"
+          data-email-button
+          data-u={user}
+          data-d={domain}
+          data-copy-label={copy.ui.copyEmail}
+          data-copied={copy.ui.emailCopied}
+        >
+          <Mail slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
+        </Card>
+      </ActionsPanel>
+      <ActionsPanel id="home-email">
+        <Card
+          subtitle={home.cta.subtitle}
+          as="button"
+          data-email-button
+          data-show-address
+          data-u={user}
+          data-d={domain}
+          data-copy-label={copy.ui.copyEmail}
+          data-copied={copy.ui.emailCopied}
+        >
+          <Mail slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
+          <span slot="title" data-email-label>{copy.ui.email}</span>
+          <Copy slot="aside" size={14} stroke-width={1} nonScalingStroke />
+        </Card>
+      </ActionsPanel>
+      {
+        site.social.map(link => (
+          <ActionsPanel id={`home-social-${link.icon}`}>
+            <Card title={link.handle} subtitle={home.socialCta} href={link.href} target="_blank" rel="noopener noreferrer">
+              <BrandIcon slot="icon" name={link.icon} size={18} />
+              <ArrowUpRight slot="aside" size={14} stroke-width={1} nonScalingStroke />
+            </Card>
+          </ActionsPanel>
+        ))
+      }
+      <ActionsPanel id="home-presentation" wide>
+        {
+          home.presentation.options.map((option, i) => {
+            const Icon = optionIcons[i] ?? FileText
+            return (
+              <Card title={option.title} subtitle={option.subtitle} badge={option.badge}>
+                <Icon slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
+              </Card>
+            )
+          })
+        }
+      </ActionsPanel>
+    </ActionsContainer>
   </div>
 
   <footer class="relative z-10 mt-auto pb-10 text-center text-xs text-muted" data-animate="home-item">
@@ -87,7 +131,7 @@ const pill = 'flex h-9.5 items-center rounded-full bg-foreground/10 transition-c
 </section>
 
 <script>
-  import { bindMailtoLinks } from '@/lib/email'
+  import { bindEmailButtons } from '@/lib/email'
   import { initGsap } from '@/lib/gsap'
   import { INTRO_SEEN_KEY, shouldPlayEntrance } from '@/lib/intro'
   import { prefersReducedMotion } from '@/lib/motion'
@@ -95,7 +139,7 @@ const pill = 'flex h-9.5 items-center rounded-full bg-foreground/10 transition-c
   import type { IntroMode } from '@/data'
   import { createHomeEntrance, setHomeFinal } from './Home.anim'
 
-  bindMailtoLinks()
+  bindEmailButtons()
 
   const home = document.getElementById('home')
 

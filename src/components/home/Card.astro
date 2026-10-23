@@ -1,0 +1,53 @@
+---
+// Notification-style card, like an iOS push notification (visual only): a
+// black icon tile, the title with an optional badge at the right, and a muted
+// subtitle. With `href` it is a link; `as` makes it a link without one (a
+// mailto hook) or a button (copy-email). Other attributes (data-*) pass
+// through. Slots: `icon` (required), `title` to replace the title text, and
+// `aside` to put an icon where the badge goes.
+interface Props {
+  title?: string
+  subtitle: string
+  badge?: string
+  href?: string
+  as?: 'a' | 'button' | 'div'
+  target?: string
+  rel?: string
+  class?: string
+  [attr: `data-${string}`]: string | undefined
+}
+
+const { title, subtitle, badge, href, as, class: className, ...attrs } = Astro.props
+const Tag = href ? 'a' : (as ?? 'div')
+---
+
+<Tag
+  href={href}
+  type={Tag === 'button' ? 'button' : undefined}
+  class:list={[
+    'flex min-w-0 flex-1 items-start gap-3 rounded-2xl bg-white/8 p-3 text-left backdrop-blur-[40px]',
+    Tag !== 'div' && 'cursor-pointer transition-colors hover:bg-white/12',
+    className,
+  ]}
+  {...attrs}
+>
+  <span class="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-[10px] bg-black" aria-hidden="true">
+    <slot name="icon" />
+  </span>
+  <span class="flex min-h-10 min-w-0 flex-1 flex-col justify-center gap-0.5">
+    <span class="flex items-start gap-2.5">
+      <span class="min-w-0 flex-1 truncate text-sm leading-[18px] font-medium tracking-[-0.5px] text-white">
+        <slot name="title">{title}</slot>
+      </span>
+      {badge && <span class="shrink-0 text-right text-xs leading-[18px] tracking-[-0.078px] text-muted">{badge}</span>}
+      {
+        Astro.slots.has('aside') && (
+          <span class="flex h-[18px] shrink-0 items-center text-muted" aria-hidden="true">
+            <slot name="aside" />
+          </span>
+        )
+      }
+    </span>
+    <span class="truncate text-sm leading-[18px] tracking-[-0.078px] text-muted">{subtitle}</span>
+  </span>
+</Tag>

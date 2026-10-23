@@ -19,6 +19,8 @@ export interface SocialLink {
   readonly href: string
   /** Icon for icon-only buttons (the home). */
   readonly icon: SocialIcon
+  /** Handle shown on the home's social card (e.g. '@criworks'). */
+  readonly handle: string
 }
 
 export interface SeoContent { readonly title: string; readonly description: string }
@@ -75,8 +77,11 @@ export interface HomeContent {
   readonly role: string
   /** Two lines, shown one under the other. */
   readonly tagline: readonly string[]
-  /** `path` has no locale prefix; the page adds it. */
-  readonly presentation: { readonly label: string; readonly path: string }
+  readonly presentation: {
+    readonly label: string
+    /** Cards the presentation select shows when open. */
+    readonly options: readonly { readonly title: string; readonly subtitle: string; readonly badge: string }[]
+  }
   /** Accessible name of the availability dot; also its tooltip. */
   readonly availability: string
   readonly cta: {
@@ -87,6 +92,8 @@ export interface HomeContent {
   }
   readonly footer: string
   readonly socialLabel: string
+  /** Subtitle of each social card. */
+  readonly socialCta: string
 }
 export interface ContactContent { readonly title: string; readonly tagline: string; readonly cta: string }
 export interface UIStrings {
