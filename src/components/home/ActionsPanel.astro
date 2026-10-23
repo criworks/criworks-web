@@ -4,7 +4,8 @@
 // opens them (give them the id it `controls`). With `wide` the items keep
 // the 281px of the design side by side, centered past the column; when the
 // viewport can't fit two of them (the cards breakpoint) they stack
-// at the column's width.
+// at the column's width. Wide panels center on the viewport, so their
+// ActionsContainer should be centered on the page too.
 interface Props {
   id?: string
   default?: boolean
