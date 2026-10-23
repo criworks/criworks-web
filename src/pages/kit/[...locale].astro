@@ -7,6 +7,7 @@ import { ArrowUpRight, Copy, Mail, MonitorSmartphone, Send } from '@lucide/astro
 import { Container, NavDrawer, ProjectCard, SectionHeader, Stack } from '@/components'
 import {
   AccentPicker,
+  Actions,
   ActionsContainer,
   ActionsPanel,
   Card,
@@ -101,9 +102,9 @@ const github = site.social[0]
       </Stack>
 
       <Stack gap="sm">
-        <h3 class="text-sm uppercase text-muted">Home: Toolbar, ActionsContainer, AccentPicker</h3>
+        <h3 class="text-sm uppercase text-muted">Home: Actions (Toolbar, ActionsContainer, AccentPicker)</h3>
         <p class="text-sm text-muted">Each item opens its panel below; tap it again, outside, or press Escape to close.</p>
-        <div class="mx-auto flex w-full max-w-94 flex-col gap-4">
+        <Actions>
           <Toolbar>
             <ToolbarGroup grow>
               <ToolbarSelect label={home.presentation.label} controls="kit-select" />
@@ -141,7 +142,7 @@ const github = site.social[0]
               <AccentPicker colors={accents} label={home.accentLabel} />
             </ActionsPanel>
           </ActionsContainer>
-        </div>
+        </Actions>
       </Stack>
     </Stack>
   </Container>

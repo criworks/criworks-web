@@ -2,10 +2,9 @@
 // One view of an ActionsContainer: its items centered, 10px apart. The
 // `default` panel shows first; the others stay hidden until a ToolbarSelect
 // opens them (give them the id it `controls`). With `wide` the items keep
-// the 281px of the design side by side, centered past the column; when the
-// viewport can't fit two of them (the cards breakpoint) they stack
-// at the column's width. Wide panels center on the viewport, so their
-// ActionsContainer should be centered on the page too.
+// the 281px of the design side by side, centered on the ActionsContainer and
+// spreading past it on both sides; when the viewport can't fit two of them
+// (the cards breakpoint) they stack at the container's width.
 interface Props {
   id?: string
   default?: boolean
@@ -22,7 +21,7 @@ const { id, default: isDefault = false, wide = false } = Astro.props
   class:list={[
     'w-full items-start justify-center gap-2.5 [&:not([hidden])]:flex',
     wide &&
-      'flex-col *:w-full cards:relative cards:left-1/2 cards:w-dvw cards:flex-none cards:-translate-x-1/2 cards:flex-row cards:px-4 cards:*:w-70.25 cards:*:flex-none',
+      'flex-col *:w-full cards:relative cards:left-1/2 cards:w-max cards:flex-none cards:-translate-x-1/2 cards:flex-row cards:*:w-70.25 cards:*:flex-none',
   ]}
 >
   <slot />

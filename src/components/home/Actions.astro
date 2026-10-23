@@ -1,0 +1,17 @@
+---
+// The Actions block of the design: a Toolbar over its ActionsContainer, 16px
+// apart, in a column centered on the page. Wide panels center on the
+// ActionsContainer and spread past it on both sides, so keeping the block
+// centered keeps them evenly on screen. Default slot: the Toolbar and the
+// ActionsContainer.
+interface Props {
+  class?: string
+  'data-animate'?: string
+}
+
+const { class: className, ...attrs } = Astro.props
+---
+
+<div class:list={['mx-auto flex w-full max-w-94 flex-col items-center gap-4', className]} {...attrs}>
+  <slot />
+</div>
