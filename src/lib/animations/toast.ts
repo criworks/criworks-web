@@ -1,7 +1,7 @@
 import type { gsap as GsapType } from 'gsap'
 import { ANIMATION_EASING } from '@/lib/constants'
 
-const VISIBLE_MS = 2200
+const VISIBLE_MS = 4000
 let hideTimer: ReturnType<typeof setTimeout> | undefined
 
 /** Shows the page's Toast (components/ui/Toast.astro) with a message. */

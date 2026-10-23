@@ -3,7 +3,7 @@
 // and a contact card at the top; the back portrait stays at the bottom center,
 // where the splash loader leaves it. Content is server-rendered and readable
 // before JS: hero-initial.css only dims it and Home.anim.ts lifts it.
-import { FileText, Mail, MonitorSmartphone } from '@lucide/astro'
+import { Copy, FileText, Mail, MonitorSmartphone } from '@lucide/astro'
 import { BackPortrait } from '@/components/composed'
 import {
   ActionsContainer,
@@ -50,14 +50,7 @@ const optionIcons = [MonitorSmartphone, FileText]
         <ToolbarSelect label={home.presentation.label} controls="home-presentation" />
       </ToolbarGroup>
       <ToolbarGroup>
-        <ToolbarIconButton
-          label={copy.ui.copyEmail}
-          data-email-button
-          data-u={user}
-          data-d={domain}
-          data-copy-label={copy.ui.copyEmail}
-          data-copied={copy.ui.emailCopied}
-        >
+        <ToolbarIconButton label={copy.ui.email} controls="home-email">
           <Mail size={14} stroke-width={1} nonScalingStroke />
         </ToolbarIconButton>
       </ToolbarGroup>
@@ -77,8 +70,24 @@ const optionIcons = [MonitorSmartphone, FileText]
 
     <ActionsContainer class="mt-4" data-animate="home-item">
       <ActionsPanel default>
-        <Card title={home.cta.title} subtitle={home.cta.subtitle} badge={home.cta.badge} data-mailto data-u={user} data-d={domain}>
+        <Card title={home.cta.title} subtitle={home.cta.subtitle} badge={home.cta.badge} as="a" data-mailto data-u={user} data-d={domain}>
           <Mail slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
+        </Card>
+      </ActionsPanel>
+      <ActionsPanel id="home-email">
+        <Card
+          subtitle={home.cta.subtitle}
+          as="button"
+          data-email-button
+          data-show-address
+          data-u={user}
+          data-d={domain}
+          data-copy-label={copy.ui.copyEmail}
+          data-copied={copy.ui.emailCopied}
+        >
+          <Mail slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
+          <span slot="title" data-email-label>{copy.ui.email}</span>
+          <Copy slot="aside" size={14} stroke-width={1} nonScalingStroke />
         </Card>
       </ActionsPanel>
       <ActionsPanel id="home-presentation" wide>
