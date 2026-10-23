@@ -83,6 +83,8 @@ export interface UIStrings {
   readonly allWork: string
   readonly year: string
   readonly tags: string
+  /** Splash loader label, followed by the percentage. */
+  readonly loading: string
 }
 
 export interface Content {

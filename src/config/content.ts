@@ -98,6 +98,7 @@ export const content = {
       allWork: 'Todo el trabajo',
       year: 'Año',
       tags: 'Áreas',
+      loading: 'Cargando...',
     },
   },
   en: {
@@ -191,6 +192,7 @@ export const content = {
       allWork: 'All work',
       year: 'Year',
       tags: 'Areas',
+      loading: 'Loading...',
     },
   },
 } as const satisfies Localized<Content>

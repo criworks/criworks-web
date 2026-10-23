@@ -4,7 +4,7 @@
 import type { GetStaticPaths } from 'astro'
 import { Image } from 'astro:assets'
 import heroBg from '@/assets/images/hero-bg.webp'
-import { NavDrawer } from '@/components/composed'
+import { NavDrawer, SplashLoader } from '@/components/composed'
 import { Toast } from '@/components/ui'
 import { content, homeSections, locales, site } from '@/config'
 import type { SectionName } from '@/config'
@@ -52,6 +52,8 @@ const workHref = !hasWork
 ---
 
 <BaseLayout title={seo.title} description={seo.description} locale={locale} path={profile?.slug}>
+  {!profile && intro !== 'none' && <SplashLoader label={copy.ui.loading} intro={intro} />}
+
   <!-- Fixed background: pans and blurs as the page scrolls (Hero.anim.ts).
        Eager and high priority because it is the LCP element. On phones the
        wrapper centers site.heroFocusX; it is a separate element because GSAP

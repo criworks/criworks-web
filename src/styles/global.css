@@ -12,3 +12,4 @@
 /* Animation base states */
 @import './animations/backdrop.css';
 @import './animations/hero-initial.css';
+@import './animations/splash.css';
