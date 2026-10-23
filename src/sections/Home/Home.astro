@@ -29,8 +29,17 @@ interface Props {
 const { copy, intro } = Astro.props
 const { home } = copy
 const [user, domain] = site.email.split('@')
-// Accent colors the dot offers; the first is the theme's default.
-const accents = [activePalette.accent, '#295FD7', '#A621D9', '#EE9837', '#EC622E', '#E83657', '#85BC7F']
+// Accent colors the dot offers, each with its back portrait in
+// public/portraits/ (see the README there); the first is the theme's default.
+const accents = [
+  { color: activePalette.accent, portrait: '/portraits/back-cyan.png' },
+  { color: '#295FD7', portrait: '/portraits/back-blue.png' },
+  { color: '#A621D9', portrait: '/portraits/back-violet.png' },
+  { color: '#EE9837', portrait: '/portraits/back-orange.png' },
+  { color: '#EC622E', portrait: '/portraits/back-red-orange.png' },
+  { color: '#E83657', portrait: '/portraits/back-red.png' },
+  { color: '#85BC7F', portrait: '/portraits/back-green.png' },
+]
 // One icon per presentation option, in order (Consultor, Contractor).
 const optionIcons = [MonitorSmartphone, FileText]
 ---

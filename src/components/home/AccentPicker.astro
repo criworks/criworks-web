@@ -1,12 +1,14 @@
 ---
 // Row of accent colors in a glass pill, with a small white indicator under
 // the active one. Picking a color sets --color-accent on <html>, so the
-// whole page (and the back portrait) follows, and remembers it for the next
-// visit. The first color is the default.
+// whole page follows, swaps the back portrait for that color's photo (the
+// original until the file exists) and remembers it for the next visit. The
+// first color is the default.
 import { ACCENT_KEY } from './accent'
 
 interface Props {
-  colors: readonly string[]
+  /** `portrait` is that color's photo under public/, e.g. '/portraits/back-cyan.png'. */
+  colors: readonly { readonly color: string; readonly portrait: string }[]
   /** Accessible name of the group. */
   label: string
 }
@@ -17,13 +19,14 @@ const { colors, label } = Astro.props
 <div class="flex flex-col items-start gap-1" data-accent-picker>
   <div role="radiogroup" aria-label={label} class="flex items-start rounded-full bg-white/8 p-1 backdrop-blur-[40px]">
     {
-      colors.map((color, i) => (
+      colors.map(({ color, portrait }, i) => (
         <button
           type="button"
           role="radio"
           aria-checked={i === 0 ? 'true' : 'false'}
           aria-label={color}
           data-accent={color}
+          data-portrait={portrait}
           class="flex cursor-pointer rounded-full p-0.5"
         >
           <span class="size-[17px] rounded-full" style={`background:${color}`} />
