@@ -1,0 +1,18 @@
+---
+// The back portrait, centered and anchored to the bottom of the viewport.
+// Shared by the splash loader and the home so both place it exactly alike:
+// when the splash fades out, the image under it is already in the same spot.
+import { Image } from 'astro:assets'
+import portrait from '@/assets/images/splash-portrait.png'
+
+interface Props {
+  id?: string
+  class?: string
+}
+
+const { id, class: className } = Astro.props
+---
+
+<div id={id} class:list={['pointer-events-none absolute right-0 -bottom-[12%] left-0 flex justify-center', className]} aria-hidden="true">
+  <Image src={portrait} alt="" loading="eager" class="block h-[73dvh] w-auto max-w-none object-cover" />
+</div>

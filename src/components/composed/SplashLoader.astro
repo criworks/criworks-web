@@ -1,13 +1,13 @@
 ---
-// Home loader: a pill with a progress ring and percentage, over a back
-// portrait rising from the bottom. Shown only while the hero entrance will
-// play (styles/animations/splash.css), so it follows the same `intro` rules:
+// Home loader: a pill with a progress ring and percentage, over the back
+// portrait. On exit the pill leaves and the splash fades, uncovering the
+// home's own portrait in the same place. Shown only while the home entrance
+// will play (styles/animations/splash.css), so it follows the `intro` rules:
 // 'subtle' once per session, 'full' every visit, never with reduced motion
-// or without JS. The Hero waits for it to leave (whenSplashDone in lib/splash.ts).
-import { Image } from 'astro:assets'
-import splashBg from '@/assets/images/splash-portrait.png'
+// or without JS. The entrance waits for it to leave (whenSplashDone in lib/splash.ts).
 import type { IntroMode } from '@/data'
 import { SPLASH } from '@/lib/splash'
+import BackPortrait from './BackPortrait.astro'
 
 interface Props {
   /** Label before the percentage, e.g. 'Cargando...'. */
@@ -46,10 +46,8 @@ const { label, intro } = Astro.props
     </span>
   </div>
 
-  <!-- No CSS transform on the wrapper, so GSAP's y stays clean -->
-  <div id="splash-img-wrap" class="pointer-events-none absolute right-0 -bottom-[10%] left-0 flex justify-center">
-    <Image src={splashBg} alt="" loading="eager" class="block h-[80dvh] w-auto max-w-none object-cover" />
-  </div>
+  <!-- Same spot as the home's portrait, so it stays put when the splash fades -->
+  <BackPortrait />
 </div>
 
 <script>
@@ -60,7 +58,6 @@ const { label, intro } = Astro.props
   const arc = document.getElementById('splash-arc')
   const pct = document.getElementById('splash-pct')
   const pill = document.getElementById('splash-pill')
-  const imgWrap = document.getElementById('splash-img-wrap')
   const root = document.documentElement
 
   function finish(): void {
@@ -69,7 +66,7 @@ const { label, intro } = Astro.props
     document.dispatchEvent(new Event(SPLASH_DONE_EVENT))
   }
 
-  if (!splash || getComputedStyle(splash).display === 'none' || !arc || !pct || !pill || !imgWrap) {
+  if (!splash || getComputedStyle(splash).display === 'none' || !arc || !pct || !pill) {
     finish()
   } else {
     const gsap = initGsap()
@@ -79,9 +76,9 @@ const { label, intro } = Astro.props
 
     const exit = () => {
       gsap
-        .timeline({ onComplete: finish, defaults: { duration: 0.45, ease: 'power3.in' } })
-        .to(pill, { y: -64, opacity: 0 })
-        .to(imgWrap, { y: 80, opacity: 0 }, '<0.05')
+        .timeline({ onComplete: finish })
+        .to(pill, { y: -64, opacity: 0, duration: 0.45, ease: 'power3.in' })
+        .to(splash, { opacity: 0, duration: 0.4, ease: 'power1.inOut' }, '-=0.1')
     }
 
     const tick = (now: number) => {

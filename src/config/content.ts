@@ -23,6 +23,15 @@ export const content = {
       cta: 'Cómo te ayudo',
       ctaHref: '/freelance/founder#services',
     },
+    home: {
+      role: 'Product Designer',
+      tagline: ['Diseño productos que dan claridad', 'a startups tecnológicas'],
+      presentation: { label: 'Presentación', path: 'freelance/founder' },
+      availability: 'Disponible para nuevos proyectos',
+      cta: { title: 'Hablemos de tu negocio', subtitle: 'Escríbeme y agendemos una llamada', badge: 'Ahora' },
+      footer: 'Product Designer. Santiago de Chile.',
+      socialLabel: 'Redes',
+    },
     statement: {
       lead: 'Sientes que todo está difuso.',
       lines: [
@@ -116,6 +125,15 @@ export const content = {
       subtitle: 'I design products that bring clarity to tech startups.',
       cta: 'How I help',
       ctaHref: '/en/freelance/founder#services',
+    },
+    home: {
+      role: 'Product Designer',
+      tagline: ['I design products that bring clarity', 'to tech startups'],
+      presentation: { label: 'Presentation', path: 'freelance/founder' },
+      availability: 'Available for new projects',
+      cta: { title: "Let's talk about your business", subtitle: 'Write to me and we’ll book a call', badge: 'Now' },
+      footer: 'Product Designer. Santiago, Chile.',
+      socialLabel: 'Social',
     },
     statement: {
       lead: 'Everything feels blurry.',

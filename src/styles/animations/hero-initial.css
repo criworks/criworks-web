@@ -1,4 +1,4 @@
-/* Hero starting state before GSAP takes control.
+/* Hero and home starting state before GSAP takes control.
    Content stays readable (dimmed, never hidden) so the hero works at first
    paint, without JS, and if a script fails. Only dimmed when the entrance
    will play: intro 'full' always, 'subtle' until it has played once this
@@ -14,7 +14,8 @@
     & [data-animate='hero-social'],
     & [data-animate='hero-sub'],
     & [data-animate='hero-cta'],
-    & [data-animate='hero-contact'] {
+    & [data-animate='hero-contact'],
+    & [data-animate='home-item'] {
       opacity: 0.6;
     }
   }
