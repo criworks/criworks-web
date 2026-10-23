@@ -16,7 +16,8 @@ function target(btn: HTMLElement): { panel: HTMLElement; container: HTMLElement 
  * Wires every toolbar toggle (ToolbarSelect, ToolbarIconButton with
  * `controls`): opening one swaps its ActionsPanel into the ActionsContainer
  * and closes the other toggles of that container; closing it brings back the
- * default panel. Escape closes it. Safe to call more than once.
+ * default panel. Escape, or a click or tap outside the toggle and its panel,
+ * closes it too. Safe to call more than once.
  */
 export function bindToolbarToggles(): void {
   const toggles = [...document.querySelectorAll<HTMLElement>('[data-toolbar-toggle]')]
@@ -38,6 +39,15 @@ export function bindToolbarToggles(): void {
       btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'))
       document.addEventListener('keydown', e => {
         if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') set(false)
+      })
+      // Another toggle handles its own click (it closes this one), so only
+      // clicks outside every toggle and outside the panel's items close it
+      // here; the empty space around the items counts as outside.
+      document.addEventListener('click', e => {
+        const target = e.target
+        if (btn.getAttribute('aria-expanded') !== 'true' || !(target instanceof Node)) return
+        const inside = [...own.panel.children, ...toggles].some(el => el.contains(target))
+        if (!inside) set(false)
       })
     })
 }
