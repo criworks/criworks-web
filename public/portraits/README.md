@@ -15,4 +15,4 @@ original portrait (`src/assets/images/splash-portrait.png`) shows instead.
 | Green   | `#85BC7F` | `back-green.png`     |
 
 Same framing and size as the original (1183×810, transparent background), so
-the swap doesn't move the image. The paths live in `src/sections/Home/Home.astro`.
+the swap doesn't move the image. The paths live in `src/config/accents.ts`.
