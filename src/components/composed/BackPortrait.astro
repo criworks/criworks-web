@@ -2,7 +2,10 @@
 // The back portrait, centered and anchored to the bottom of the viewport.
 // Shared by the splash loader and the home so both place it exactly alike:
 // when the splash fades out, the image under it is already in the same spot.
-import { Image } from 'astro:assets'
+// A layer in the accent color, masked by the image itself, recolors it with
+// mix-blend-mode: hue (keeping the photo's own light and saturation), so
+// the portrait follows --color-accent.
+import { getImage } from 'astro:assets'
 import portrait from '@/assets/images/splash-portrait.png'
 
 interface Props {
@@ -11,8 +14,15 @@ interface Props {
 }
 
 const { id, class: className } = Astro.props
+const image = await getImage({ src: portrait, format: 'webp' })
 ---
 
 <div id={id} class:list={['pointer-events-none absolute right-0 -bottom-[12%] left-0 flex justify-center', className]} aria-hidden="true">
-  <Image src={portrait} alt="" loading="eager" class="block h-[73dvh] w-auto max-w-none object-cover" />
+  <div class="relative isolate">
+    <img src={image.src} {...image.attributes} alt="" loading="eager" class="block h-[73dvh] w-auto max-w-none object-cover" />
+    <span
+      class="absolute inset-0 bg-accent mix-blend-hue"
+      style={`mask-image:url(${image.src});mask-size:100% 100%;-webkit-mask-image:url(${image.src});-webkit-mask-size:100% 100%`}
+    ></span>
+  </div>
 </div>
