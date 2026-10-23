@@ -26,7 +26,13 @@ export const content = {
     home: {
       role: 'Product Designer',
       tagline: ['Diseño productos que dan claridad', 'a startups tecnológicas'],
-      presentation: { label: 'Presentación', path: 'freelance/founder' },
+      presentation: {
+        label: 'Presentación',
+        options: [
+          { title: 'Consultor', subtitle: 'Visitar perfil', badge: 'Pronto' },
+          { title: 'Contractor', subtitle: 'Visitar perfil', badge: 'Pronto' },
+        ],
+      },
       availability: 'Disponible para nuevos proyectos',
       cta: { title: 'Hablemos de tu negocio', subtitle: 'Escríbeme y agendemos una llamada', badge: 'Ahora' },
       footer: 'Product Designer. Santiago de Chile.',
@@ -129,7 +135,13 @@ export const content = {
     home: {
       role: 'Product Designer',
       tagline: ['I design products that bring clarity', 'to tech startups'],
-      presentation: { label: 'Presentation', path: 'freelance/founder' },
+      presentation: {
+        label: 'Presentation',
+        options: [
+          { title: 'Consultant', subtitle: 'Visit profile', badge: 'Soon' },
+          { title: 'Contractor', subtitle: 'Visit profile', badge: 'Soon' },
+        ],
+      },
       availability: 'Available for new projects',
       cta: { title: "Let's talk about your business", subtitle: 'Write to me and we’ll book a call', badge: 'Now' },
       footer: 'Product Designer. Santiago, Chile.',
