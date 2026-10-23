@@ -1,7 +1,8 @@
 ---
 // Holds what the toolbar shows below it (cards, buttons, previews, links).
 // With panels inside, only one shows at a time: the `default` one, or the
-// one an open ToolbarSelect points at.
+// one an open toolbar toggle points at. Goes inside Actions, which keeps it
+// centered for wide panels.
 interface Props {
   class?: string
   'data-animate'?: string

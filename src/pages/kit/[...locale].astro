@@ -3,10 +3,22 @@
 // component. Only built in `npm run dev` (open /kit or /kit/en); production
 // builds skip it.
 import type { GetStaticPaths } from 'astro'
-import { Mail, Send } from '@lucide/astro'
+import { ArrowUpRight, Copy, Mail, MonitorSmartphone, Send } from '@lucide/astro'
 import { Container, NavDrawer, ProjectCard, SectionHeader, Stack } from '@/components'
-import { Badge, Button, Link, Toast } from '@/components/ui'
-import { content, defaultLocale, locales, site } from '@/config'
+import {
+  AccentPicker,
+  Actions,
+  ActionsContainer,
+  ActionsPanel,
+  Card,
+  Toolbar,
+  ToolbarDot,
+  ToolbarGroup,
+  ToolbarIconButton,
+  ToolbarSelect,
+} from '@/components/home'
+import { Badge, BrandIcon, Button, Link, Toast } from '@/components/ui'
+import { accents, content, defaultLocale, locales, site } from '@/config'
 import { projects, type Locale } from '@/data'
 import { BaseLayout } from '@/layouts'
 
@@ -21,6 +33,8 @@ interface Props {
 
 const { locale } = Astro.props
 const copy = content[locale]
+const { home } = copy
+const github = site.social[0]
 ---
 
 <BaseLayout title="Component kit" description="All template components." locale={locale} path="kit">
@@ -64,6 +78,71 @@ const copy = content[locale]
         <div class="grid gap-10 mobile:grid-cols-2 narrow:grid-cols-3">
           {projects.map(project => <ProjectCard project={project} locale={locale} linkLabel={copy.ui.viewProject} />)}
         </div>
+      </Stack>
+
+      <Stack gap="sm">
+        <h3 class="text-sm uppercase text-muted">Home: Card</h3>
+        <div class="flex max-w-xl flex-col gap-2.5">
+          <Card title={home.cta.title} subtitle={home.cta.subtitle} badge={home.cta.badge}>
+            <Mail slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
+          </Card>
+          <Card title={site.email} subtitle={home.cta.subtitle} as="button">
+            <Mail slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
+            <Copy slot="aside" size={14} stroke-width={1} nonScalingStroke />
+          </Card>
+          {
+            github && (
+              <Card title={github.handle} subtitle={home.socialCta} href={github.href}>
+                <BrandIcon slot="icon" name={github.icon} size={18} />
+                <ArrowUpRight slot="aside" size={14} stroke-width={1} nonScalingStroke />
+              </Card>
+            )
+          }
+        </div>
+      </Stack>
+
+      <Stack gap="sm">
+        <h3 class="text-sm uppercase text-muted">Home: Actions (Toolbar, ActionsContainer, AccentPicker)</h3>
+        <p class="text-sm text-muted">Each item opens its panel below; tap it again, outside, or press Escape to close.</p>
+        <Actions>
+          <Toolbar>
+            <ToolbarGroup grow>
+              <ToolbarSelect label={home.presentation.label} controls="kit-select" />
+            </ToolbarGroup>
+            <ToolbarGroup>
+              <ToolbarIconButton label={copy.ui.email} controls="kit-icon">
+                <Mail size={14} stroke-width={1} nonScalingStroke />
+              </ToolbarIconButton>
+            </ToolbarGroup>
+            <ToolbarGroup>
+              <ToolbarDot label={home.accentLabel} controls="kit-accent" />
+            </ToolbarGroup>
+          </Toolbar>
+          <ActionsContainer>
+            <ActionsPanel default>
+              <Card title="Default panel" subtitle="Shown while nothing is open">
+                <Mail slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
+              </Card>
+            </ActionsPanel>
+            <ActionsPanel id="kit-select" wide>
+              {
+                home.presentation.options.map(option => (
+                  <Card title={option.title} subtitle={option.subtitle} badge={option.badge}>
+                    <MonitorSmartphone slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
+                  </Card>
+                ))
+              }
+            </ActionsPanel>
+            <ActionsPanel id="kit-icon">
+              <Card title={site.email} subtitle={home.cta.subtitle}>
+                <Mail slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
+              </Card>
+            </ActionsPanel>
+            <ActionsPanel id="kit-accent">
+              <AccentPicker colors={accents} label={home.accentLabel} />
+            </ActionsPanel>
+          </ActionsContainer>
+        </Actions>
       </Stack>
     </Stack>
   </Container>

@@ -1,3 +1,5 @@
+export { default as AccentPicker } from './AccentPicker.astro'
+export { default as Actions } from './Actions.astro'
 export { default as ActionsContainer } from './ActionsContainer.astro'
 export { default as ActionsPanel } from './ActionsPanel.astro'
 export { default as Card } from './Card.astro'

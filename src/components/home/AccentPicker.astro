@@ -1,0 +1,55 @@
+---
+// Row of accent colors in a glass pill, with a small white indicator under
+// the active one. Picking a color sets --color-accent on <html>, so the
+// whole page follows, swaps the back portrait for that color's photo (the
+// original until the file exists) and remembers it for the next visit. The
+// first color is the default.
+import type { Accent } from '@/config'
+import { ACCENT_KEY } from './accent'
+
+interface Props {
+  colors: readonly Accent[]
+  /** Accessible name of the group. */
+  label: string
+}
+
+const { colors, label } = Astro.props
+---
+
+<div class="flex flex-col items-start gap-1" data-accent-picker>
+  <div role="radiogroup" aria-label={label} class="flex items-start rounded-full bg-glass p-1 backdrop-blur-glass">
+    {
+      colors.map(({ color, portrait }, i) => (
+        <button
+          type="button"
+          role="radio"
+          aria-checked={i === 0 ? 'true' : 'false'}
+          aria-label={color}
+          data-accent={color}
+          data-portrait={portrait}
+          class="flex cursor-pointer rounded-full p-0.5"
+        >
+          <span class="size-[17px] rounded-full" style={`background:${color}`} />
+        </button>
+      ))
+    }
+  </div>
+  <div class="relative h-[5px] w-full" aria-hidden="true">
+    <span data-accent-indicator class="absolute top-0 left-3 size-[5px] rounded-full bg-foreground transition-transform duration-300"></span>
+  </div>
+</div>
+
+<!-- Before paint, so a remembered accent doesn't flash the default first. -->
+<script is:inline define:vars={{ key: ACCENT_KEY }}>
+  try {
+    const accent = localStorage.getItem(key)
+    if (accent) document.documentElement.style.setProperty('--color-accent', accent)
+  } catch {
+    // Storage blocked: the default accent stays.
+  }
+</script>
+
+<script>
+  import { bindAccentPickers } from './accent'
+  bindAccentPickers()
+</script>

@@ -1,0 +1,23 @@
+/* Tokens for this site's own home components (components/home): the glass
+   surfaces, their radii and the widths where the layout changes. Colors mix
+   from --color-foreground, so they follow the theme. */
+@theme {
+  /* Glass: the pill and card background, an item over it (hover, open) and
+     a card on hover. Utilities: bg-glass, bg-glass-raised, bg-glass-strong. */
+  --color-glass: color-mix(in srgb, var(--color-foreground) 8%, transparent);
+  --color-glass-raised: color-mix(in srgb, var(--color-foreground) 10%, transparent);
+  --color-glass-strong: color-mix(in srgb, var(--color-foreground) 12%, transparent);
+  --blur-glass: 40px;
+
+  /* Card and its icon tile. Utilities: rounded-card, rounded-tile. */
+  --radius-card: 16px;
+  --radius-tile: 10px;
+
+  /* Viewport where two 281px option cards fit side by side with the page
+     gutters (cards:). The option cards and the select's icon both use it. */
+  --breakpoint-cards: 604px;
+
+  /* Toolbar width below which the select shows only its icon: a 300px
+     viewport minus the page gutters (@max-toolbar-compact:). */
+  --container-toolbar-compact: 268px;
+}

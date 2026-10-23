@@ -6,6 +6,8 @@
 import { ArrowUpRight, Copy, FileText, Mail, MonitorSmartphone } from '@lucide/astro'
 import { BackPortrait } from '@/components/composed'
 import {
+  AccentPicker,
+  Actions,
   ActionsContainer,
   ActionsPanel,
   Card,
@@ -16,7 +18,7 @@ import {
   ToolbarSelect,
 } from '@/components/home'
 import { BrandIcon } from '@/components/ui'
-import { site } from '@/config'
+import { accents, site } from '@/config'
 import type { Content, IntroMode, Locale } from '@/data'
 
 interface Props {
@@ -45,84 +47,89 @@ const optionIcons = [MonitorSmartphone, FileText]
       {home.tagline.map(line => <span class="block">{line}</span>)}
     </p>
 
-    <Toolbar class="mt-8" data-animate="home-item">
-      <ToolbarGroup grow>
-        <ToolbarSelect label={home.presentation.label} controls="home-presentation" />
-      </ToolbarGroup>
-      <ToolbarGroup>
-        <ToolbarIconButton label={copy.ui.email} controls="home-email">
-          <Mail size={14} stroke-width={1} nonScalingStroke />
-        </ToolbarIconButton>
-      </ToolbarGroup>
-      <ToolbarGroup label={home.socialLabel}>
+    <Actions class="mt-8">
+      <Toolbar data-animate="home-item">
+        <ToolbarGroup grow>
+          <ToolbarSelect label={home.presentation.label} controls="home-presentation" />
+        </ToolbarGroup>
+        <ToolbarGroup>
+          <ToolbarIconButton label={copy.ui.email} controls="home-email">
+            <Mail size={14} stroke-width={1} nonScalingStroke />
+          </ToolbarIconButton>
+        </ToolbarGroup>
+        <ToolbarGroup label={home.socialLabel}>
+          {
+            site.social.map(link => (
+              <ToolbarIconButton label={link.label} controls={`home-social-${link.icon}`}>
+                <BrandIcon name={link.icon} size={14} />
+              </ToolbarIconButton>
+            ))
+          }
+        </ToolbarGroup>
+        <ToolbarGroup>
+          <ToolbarDot label={home.accentLabel} controls="home-accent" />
+        </ToolbarGroup>
+      </Toolbar>
+
+      <ActionsContainer data-animate="home-item">
+        <ActionsPanel default>
+          <Card
+            title={home.cta.title}
+            subtitle={home.cta.subtitle}
+            badge={home.cta.badge}
+            as="button"
+            data-email-button
+            data-u={user}
+            data-d={domain}
+            data-copy-label={copy.ui.copyEmail}
+            data-copied={copy.ui.emailCopied}
+          >
+            <Mail slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
+          </Card>
+        </ActionsPanel>
+        <ActionsPanel id="home-email">
+          <Card
+            subtitle={home.cta.subtitle}
+            as="button"
+            data-email-button
+            data-show-address
+            data-u={user}
+            data-d={domain}
+            data-copy-label={copy.ui.copyEmail}
+            data-copied={copy.ui.emailCopied}
+          >
+            <Mail slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
+            <span slot="title" data-email-label>{copy.ui.email}</span>
+            <Copy slot="aside" size={14} stroke-width={1} nonScalingStroke />
+          </Card>
+        </ActionsPanel>
         {
           site.social.map(link => (
-            <ToolbarIconButton label={link.label} controls={`home-social-${link.icon}`}>
-              <BrandIcon name={link.icon} size={14} />
-            </ToolbarIconButton>
+            <ActionsPanel id={`home-social-${link.icon}`}>
+              <Card title={link.handle} subtitle={home.socialCta} href={link.href} target="_blank" rel="noopener noreferrer">
+                <BrandIcon slot="icon" name={link.icon} size={18} />
+                <ArrowUpRight slot="aside" size={14} stroke-width={1} nonScalingStroke />
+              </Card>
+            </ActionsPanel>
           ))
         }
-      </ToolbarGroup>
-      <ToolbarGroup>
-        <ToolbarDot label={home.availability} />
-      </ToolbarGroup>
-    </Toolbar>
-
-    <ActionsContainer class="mt-4" data-animate="home-item">
-      <ActionsPanel default>
-        <Card
-          title={home.cta.title}
-          subtitle={home.cta.subtitle}
-          badge={home.cta.badge}
-          as="button"
-          data-email-button
-          data-u={user}
-          data-d={domain}
-          data-copy-label={copy.ui.copyEmail}
-          data-copied={copy.ui.emailCopied}
-        >
-          <Mail slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
-        </Card>
-      </ActionsPanel>
-      <ActionsPanel id="home-email">
-        <Card
-          subtitle={home.cta.subtitle}
-          as="button"
-          data-email-button
-          data-show-address
-          data-u={user}
-          data-d={domain}
-          data-copy-label={copy.ui.copyEmail}
-          data-copied={copy.ui.emailCopied}
-        >
-          <Mail slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
-          <span slot="title" data-email-label>{copy.ui.email}</span>
-          <Copy slot="aside" size={14} stroke-width={1} nonScalingStroke />
-        </Card>
-      </ActionsPanel>
-      {
-        site.social.map(link => (
-          <ActionsPanel id={`home-social-${link.icon}`}>
-            <Card title={link.handle} subtitle={home.socialCta} href={link.href} target="_blank" rel="noopener noreferrer">
-              <BrandIcon slot="icon" name={link.icon} size={18} />
-              <ArrowUpRight slot="aside" size={14} stroke-width={1} nonScalingStroke />
-            </Card>
-          </ActionsPanel>
-        ))
-      }
-      <ActionsPanel id="home-presentation" wide>
-        {
-          home.presentation.options.map((option, i) => {
-            const Icon = optionIcons[i] ?? FileText
-            return (
-              <Card title={option.title} subtitle={option.subtitle} badge={option.badge}>
-                <Icon slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
-              </Card>
-            )
-          })
-        }
-      </ActionsPanel>
-    </ActionsContainer>
+        <ActionsPanel id="home-accent">
+          <AccentPicker colors={accents} label={home.accentLabel} />
+        </ActionsPanel>
+        <ActionsPanel id="home-presentation" wide>
+          {
+            home.presentation.options.map((option, i) => {
+              const Icon = optionIcons[i] ?? FileText
+              return (
+                <Card title={option.title} subtitle={option.subtitle} badge={option.badge}>
+                  <Icon slot="icon" size={18} stroke-width={1.28571} nonScalingStroke />
+                </Card>
+              )
+            })
+          }
+        </ActionsPanel>
+      </ActionsContainer>
+    </Actions>
   </div>
 
   <footer class="relative z-10 mt-auto pb-10 text-center text-xs text-muted" data-animate="home-item">
