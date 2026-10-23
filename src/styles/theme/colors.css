@@ -1,0 +1,15 @@
+/* Color and font tokens — fallbacks only. ThemeStyle.astro overrides them
+   from config/theme.ts with an unlayered :root rule in <head>, so change
+   values there, not here. */
+@theme {
+  --color-background: #000000;
+  --color-foreground: #ffffff;
+  --color-accent: #23c0cf;
+  --color-accent-dark: #2c566a;
+  --color-muted: #5F6783;
+  --color-border: rgba(255, 255, 255, 0.1);
+
+  --font-sans: 'Switzer', system-ui, sans-serif;
+  --font-display: 'Switzer', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, monospace;
+}

@@ -1,0 +1,53 @@
+---
+// Site header for the home and landings, ported from consultant-web.
+// Desktop: nav links, language switch, email button. Below `narrow`: a
+// hamburger that opens the NavDrawer (render one NavDrawer per page).
+//
+// The email button (ui/EmailButton) shows `emailLabel` until JS reveals the
+// address; clicking copies it and shows the Toast.
+import { Menu } from '@lucide/astro'
+import { EmailButton, Link } from '@/components/ui'
+import type { NavItem } from '@/data'
+
+interface Props {
+  nav: readonly NavItem[]
+  navLabel: string
+  openMenuLabel: string
+  email: string
+  emailLabel: string
+  copyEmailLabel: string
+  copiedMessage: string
+  /** Links to this page in the other languages. */
+  languages: readonly { label: string; href: string; locale: string }[]
+}
+
+const { nav, navLabel, openMenuLabel, email, emailLabel, copyEmailLabel, copiedMessage, languages } = Astro.props
+---
+
+<header class="flex items-start justify-between gap-6 pt-10">
+  <div class="flex items-start gap-4" data-animate="hero-nav">
+    <button
+      type="button"
+      data-nav-drawer-open
+      class="flex h-11.75 w-13.5 shrink-0 cursor-pointer items-center justify-center rounded-full bg-foreground/30 narrow:hidden"
+      aria-label={openMenuLabel}
+      aria-expanded="false"
+      aria-controls="nav-drawer"
+    >
+      <Menu size={18} class="text-foreground" aria-hidden="true" />
+    </button>
+    <nav class="flex flex-col gap-4 max-narrow:hidden" aria-label={navLabel}>
+      {nav.map(item => <Link variant="secondary" label={item.label} href={item.href} />)}
+    </nav>
+  </div>
+
+  <div class="flex items-start gap-8" data-animate="hero-contact">
+    {
+      languages.map(l => (
+        <Link variant="secondary" label={l.label} href={l.href} hreflang={l.locale} lang={l.locale} class="max-mobile:hidden" />
+      ))
+    }
+    <EmailButton email={email} label={emailLabel} copyLabel={copyEmailLabel} copiedMessage={copiedMessage} showAddress />
+  </div>
+</header>
+

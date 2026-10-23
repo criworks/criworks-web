@@ -1,0 +1,14 @@
+/* Splash loader visibility. Hidden by default (no JS, reduced motion, or
+   intro already seen) and shown exactly when the hero entrance will play,
+   mirroring hero-initial.css. The `js` and `intro-seen` classes are set on
+   <html> by the inline script in BaseLayout. */
+#splash-loader {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root.js #splash-loader[data-intro-mode='full'],
+  :root.js:not(.intro-seen) #splash-loader[data-intro-mode='subtle'] {
+    display: flex;
+  }
+}
