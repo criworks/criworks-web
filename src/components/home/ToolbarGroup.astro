@@ -1,6 +1,7 @@
 ---
 // Glass pill that holds toolbar items with no gap between them. `grow` lets
-// it take the free width of the row (the select uses it). `label` names the
+// it take the free width of the row (the select uses it) down to 300px,
+// where the select drops its label and the group shrinks to fit. `label` names the
 // group for screen readers.
 interface Props {
   grow?: boolean
@@ -12,7 +13,7 @@ const { grow = false, label, class: className } = Astro.props
 ---
 
 <div
-  class:list={['flex shrink-0 items-start rounded-full bg-white/8 p-1 backdrop-blur-[40px]', grow && 'min-w-0 flex-1', className]}
+  class:list={['flex shrink-0 items-start rounded-full bg-white/8 p-1 backdrop-blur-[40px]', grow && 'min-w-0 flex-1 max-[300px]:flex-none', className]}
   role={label ? 'group' : undefined}
   aria-label={label}
 >

@@ -3,7 +3,10 @@
 // transparent over its group; hover and open give it its own background.
 // Opening it shows the ActionsPanel named by `controls` and hides the other
 // panels of that ActionsContainer; closing it brings back the default panel.
-import { ChevronsLeftRight } from '@lucide/astro'
+// The icon follows the wide ActionsPanel's layout: chevrons-left-right while
+// its cards sit side by side (604px and up), chevrons-up-down once they
+// stack. Below 300px only the icon shows, at the width of an icon button.
+import { ChevronsLeftRight, ChevronsUpDown } from '@lucide/astro'
 
 interface Props {
   label: string
@@ -21,9 +24,10 @@ const { label, controls } = Astro.props
   aria-controls={controls}
   class="flex w-full cursor-pointer items-center gap-0.5 rounded-full px-2 py-1.5 text-xs leading-[18px] tracking-[-0.078px] text-white transition-colors hover:bg-white/10 aria-expanded:bg-white/10"
 >
-  <span class="min-w-0 flex-1 truncate text-left">{label}</span>
+  <span class="min-w-0 flex-1 truncate text-left max-[300px]:sr-only">{label}</span>
   <span class="flex size-4.5 shrink-0 items-center justify-center" aria-hidden="true">
-    <ChevronsLeftRight size={14} stroke-width={1} nonScalingStroke />
+    <ChevronsUpDown size={14} stroke-width={1} nonScalingStroke class="min-[604px]:hidden" />
+    <ChevronsLeftRight size={14} stroke-width={1} nonScalingStroke class="hidden min-[604px]:block" />
   </span>
 </button>
 
