@@ -1,0 +1,13 @@
+---
+// A row of toolbar groups (ToolbarGroup), 10px apart.
+interface Props {
+  class?: string
+  'data-animate'?: string
+}
+
+const { class: className, ...attrs } = Astro.props
+---
+
+<div class:list={['flex w-full items-start justify-center gap-2.5', className]} {...attrs}>
+  <slot />
+</div>

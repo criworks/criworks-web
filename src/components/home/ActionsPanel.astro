@@ -1,0 +1,20 @@
+---
+// One view of an ActionsContainer: its items centered, 10px apart. The
+// `default` panel shows first; the others stay hidden until a ToolbarSelect
+// opens them (give them the id it `controls`).
+interface Props {
+  id?: string
+  default?: boolean
+}
+
+const { id, default: isDefault = false } = Astro.props
+---
+
+<div
+  id={id}
+  data-actions-panel={isDefault ? 'default' : ''}
+  hidden={!isDefault}
+  class="w-full items-start justify-center gap-2.5 [&:not([hidden])]:flex"
+>
+  <slot />
+</div>

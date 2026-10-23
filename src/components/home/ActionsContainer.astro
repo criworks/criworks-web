@@ -1,0 +1,15 @@
+---
+// Holds what the toolbar shows below it (cards, buttons, previews, links).
+// With panels inside, only one shows at a time: the `default` one, or the
+// one an open ToolbarSelect points at.
+interface Props {
+  class?: string
+  'data-animate'?: string
+}
+
+const { class: className, ...attrs } = Astro.props
+---
+
+<div class:list={['flex w-full', className]} {...attrs}>
+  <slot />
+</div>

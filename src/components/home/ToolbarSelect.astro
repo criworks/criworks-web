@@ -1,0 +1,33 @@
+---
+// Toolbar select: a label and the chevrons-left-right icon. Idle it is
+// transparent over its group; hover and open give it its own background.
+// Opening it shows the ActionsPanel named by `controls` and hides the other
+// panels of that ActionsContainer; closing it brings back the default panel.
+import { ChevronsLeftRight } from '@lucide/astro'
+
+interface Props {
+  label: string
+  /** id of the ActionsPanel with the options. */
+  controls: string
+}
+
+const { label, controls } = Astro.props
+---
+
+<button
+  type="button"
+  data-toolbar-select
+  aria-expanded="false"
+  aria-controls={controls}
+  class="flex w-full cursor-pointer items-center gap-0.5 rounded-full px-2 py-1.5 text-xs leading-[18px] tracking-[-0.078px] text-white backdrop-blur-[40px] transition-colors hover:bg-white/10 aria-expanded:bg-white/10"
+>
+  <span class="min-w-0 flex-1 truncate text-left">{label}</span>
+  <span class="flex size-4.5 shrink-0 items-center justify-center" aria-hidden="true">
+    <ChevronsLeftRight size={14} stroke-width={1} absoluteStrokeWidth />
+  </span>
+</button>
+
+<script>
+  import { bindToolbarSelects } from './toolbar'
+  bindToolbarSelects()
+</script>
