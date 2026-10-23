@@ -1,4 +1,5 @@
 import type { Profile } from '@/data'
+import { anchors } from './_anchors'
 
 // Freelance: agencies looking for a design partner per project.
 export default {
@@ -7,14 +8,18 @@ export default {
   sections: ['hero', 'statement', 'services', 'work', 'contact'],
   content: {
     es: {
+      ...anchors.es,
       hero: {
+        ...anchors.es.hero,
         title: 'Capacidad de diseño senior para los proyectos de tu agencia',
         subtitle: 'Me integro a tu equipo por proyecto, con tus procesos y tus herramientas.',
       },
       contact: { cta: 'Agenda una llamada' },
     },
     en: {
+      ...anchors.en,
       hero: {
+        ...anchors.en.hero,
         title: "Senior design capacity for your agency's projects",
         subtitle: 'I join your team per project, with your processes and tools.',
       },

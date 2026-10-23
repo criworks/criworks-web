@@ -2,6 +2,8 @@ import type { Content, Localized } from '@/data'
 
 // Default copy for every language. The home page uses it as is; each profile
 // in src/profiles/ overrides only what it needs.
+// The home is only the Hero, so its nav and CTA point to the founder landing;
+// profiles that have those sections link to their own anchors (profiles/_anchors.ts).
 // About (bio) and Work (projects) stay hidden until there is real copy for them:
 // add 'about' back to homeSections, and fill data/projects.ts.
 export const content = {
@@ -11,15 +13,15 @@ export const content = {
       description: 'Diseño productos que dan claridad a startups tecnológicas: web, apps, marca e IA.',
     },
     nav: [
-      { label: 'Servicios', href: '#services' },
-      { label: 'Contacto', href: '#contact' },
+      { label: 'Servicios', href: '/freelance/founder#services' },
+      { label: 'Contacto', href: '/freelance/founder#contact' },
     ],
     hero: {
       tagline: 'Product Designer en Santiago, Chile.',
       title: 'Cri Works',
       subtitle: 'Diseño productos que dan claridad a startups tecnológicas.',
       cta: 'Cómo te ayudo',
-      ctaHref: '#services',
+      ctaHref: '/freelance/founder#services',
     },
     statement: {
       lead: 'Sientes que todo está difuso.',
@@ -104,15 +106,15 @@ export const content = {
       description: 'I design products that bring clarity to tech startups: web, apps, brand, and AI.',
     },
     nav: [
-      { label: 'Services', href: '#services' },
-      { label: 'Contact', href: '#contact' },
+      { label: 'Services', href: '/en/freelance/founder#services' },
+      { label: 'Contact', href: '/en/freelance/founder#contact' },
     ],
     hero: {
       tagline: 'Product Designer in Santiago, Chile.',
       title: 'Cri Works',
       subtitle: 'I design products that bring clarity to tech startups.',
       cta: 'How I help',
-      ctaHref: '#services',
+      ctaHref: '/en/freelance/founder#services',
     },
     statement: {
       lead: 'Everything feels blurry.',
