@@ -19,6 +19,8 @@ export interface SocialLink {
   readonly href: string
   /** Icon for icon-only buttons (the home). */
   readonly icon: SocialIcon
+  /** Handle shown on the home's social card (e.g. '@criworks'). */
+  readonly handle: string
 }
 
 export interface SeoContent { readonly title: string; readonly description: string }
@@ -90,6 +92,8 @@ export interface HomeContent {
   }
   readonly footer: string
   readonly socialLabel: string
+  /** Subtitle of each social card. */
+  readonly socialCta: string
 }
 export interface ContactContent { readonly title: string; readonly tagline: string; readonly cta: string }
 export interface UIStrings {

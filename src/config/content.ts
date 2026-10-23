@@ -37,6 +37,7 @@ export const content = {
       cta: { title: 'Hablemos de tu negocio', subtitle: 'Escríbeme y agendemos una llamada', badge: 'Ahora' },
       footer: 'Product Designer. Santiago de Chile.',
       socialLabel: 'Redes',
+      socialCta: 'Visitar perfil',
     },
     statement: {
       lead: 'Sientes que todo está difuso.',
@@ -146,6 +147,7 @@ export const content = {
       cta: { title: "Let's talk about your business", subtitle: 'Write to me and we’ll book a call', badge: 'Now' },
       footer: 'Product Designer. Santiago, Chile.',
       socialLabel: 'Social',
+      socialCta: 'Visit profile',
     },
     statement: {
       lead: 'Everything feels blurry.',

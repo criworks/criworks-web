@@ -3,7 +3,7 @@
 // and a contact card at the top; the back portrait stays at the bottom center,
 // where the splash loader leaves it. Content is server-rendered and readable
 // before JS: hero-initial.css only dims it and Home.anim.ts lifts it.
-import { Copy, FileText, Mail, MonitorSmartphone } from '@lucide/astro'
+import { ArrowUpRight, Copy, FileText, Mail, MonitorSmartphone } from '@lucide/astro'
 import { BackPortrait } from '@/components/composed'
 import {
   ActionsContainer,
@@ -57,7 +57,7 @@ const optionIcons = [MonitorSmartphone, FileText]
       <ToolbarGroup label={home.socialLabel}>
         {
           site.social.map(link => (
-            <ToolbarIconButton label={link.label} href={link.href} target="_blank" rel="noopener noreferrer">
+            <ToolbarIconButton label={link.label} controls={`home-social-${link.icon}`}>
               <BrandIcon name={link.icon} size={14} />
             </ToolbarIconButton>
           ))
@@ -90,6 +90,16 @@ const optionIcons = [MonitorSmartphone, FileText]
           <Copy slot="aside" size={14} stroke-width={1} nonScalingStroke />
         </Card>
       </ActionsPanel>
+      {
+        site.social.map(link => (
+          <ActionsPanel id={`home-social-${link.icon}`}>
+            <Card title={link.handle} subtitle={home.socialCta} href={link.href} target="_blank" rel="noopener noreferrer">
+              <BrandIcon slot="icon" name={link.icon} size={18} />
+              <ArrowUpRight slot="aside" size={14} stroke-width={1} nonScalingStroke />
+            </Card>
+          </ActionsPanel>
+        ))
+      }
       <ActionsPanel id="home-presentation" wide>
         {
           home.presentation.options.map((option, i) => {
