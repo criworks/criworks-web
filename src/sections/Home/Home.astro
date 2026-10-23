@@ -6,6 +6,7 @@
 import { ArrowUpRight, Copy, FileText, Mail, MonitorSmartphone } from '@lucide/astro'
 import { BackPortrait } from '@/components/composed'
 import {
+  AccentPicker,
   ActionsContainer,
   ActionsPanel,
   Card,
@@ -16,7 +17,7 @@ import {
   ToolbarSelect,
 } from '@/components/home'
 import { BrandIcon } from '@/components/ui'
-import { site } from '@/config'
+import { activePalette, site } from '@/config'
 import type { Content, IntroMode, Locale } from '@/data'
 
 interface Props {
@@ -28,6 +29,8 @@ interface Props {
 const { copy, intro } = Astro.props
 const { home } = copy
 const [user, domain] = site.email.split('@')
+// Accent colors the dot offers; the first is the theme's default.
+const accents = [activePalette.accent, '#295FD7', '#A621D9', '#EE9837', '#EC622E', '#E83657', '#85BC7F']
 // One icon per presentation option, in order (Consultor, Contractor).
 const optionIcons = [MonitorSmartphone, FileText]
 ---
@@ -64,7 +67,7 @@ const optionIcons = [MonitorSmartphone, FileText]
         }
       </ToolbarGroup>
       <ToolbarGroup>
-        <ToolbarDot label={home.availability} />
+        <ToolbarDot label={home.accentLabel} controls="home-accent" />
       </ToolbarGroup>
     </Toolbar>
 
@@ -110,6 +113,9 @@ const optionIcons = [MonitorSmartphone, FileText]
           </ActionsPanel>
         ))
       }
+      <ActionsPanel id="home-accent">
+        <AccentPicker colors={accents} label={home.accentLabel} />
+      </ActionsPanel>
       <ActionsPanel id="home-presentation" wide>
         {
           home.presentation.options.map((option, i) => {

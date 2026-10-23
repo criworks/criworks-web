@@ -1,13 +1,35 @@
 ---
-// Status dot in the accent color (availability). `label` is its accessible
-// name and tooltip.
+// Dot in the accent color. `label` is its accessible name and tooltip. With
+// `controls` it is a button that opens that ActionsPanel (the accent picker),
+// like a ToolbarSelect; without, a plain status dot.
 interface Props {
   label: string
+  /** id of the ActionsPanel this dot opens. */
+  controls?: string
 }
 
-const { label } = Astro.props
+const { label, controls } = Astro.props
+const dot = '<span class="size-[17px] shrink-0 rounded-full bg-accent transition-colors"></span>'
 ---
 
-<span class="flex h-7.5 w-8.5 items-center justify-center px-2 py-1.5" role="img" aria-label={label} title={label}>
-  <span class="size-[17px] shrink-0 rounded-full bg-accent"></span>
-</span>
+{
+  controls ? (
+    <button
+      type="button"
+      data-toolbar-toggle
+      aria-controls={controls}
+      aria-expanded="false"
+      aria-label={label}
+      title={label}
+      class="flex h-7.5 w-8.5 cursor-pointer items-center justify-center rounded-full px-2 py-1.5 transition-colors hover:bg-white/10 aria-expanded:bg-white/10"
+      set:html={dot}
+    />
+  ) : (
+    <span class="flex h-7.5 w-8.5 items-center justify-center px-2 py-1.5" role="img" aria-label={label} title={label} set:html={dot} />
+  )
+}
+
+<script>
+  import { bindToolbarToggles } from './toolbar'
+  bindToolbarToggles()
+</script>

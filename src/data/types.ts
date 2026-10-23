@@ -82,8 +82,8 @@ export interface HomeContent {
     /** Cards the presentation select shows when open. */
     readonly options: readonly { readonly title: string; readonly subtitle: string; readonly badge: string }[]
   }
-  /** Accessible name of the availability dot; also its tooltip. */
-  readonly availability: string
+  /** Accessible name of the accent dot and its color picker. */
+  readonly accentLabel: string
   readonly cta: {
     readonly title: string
     readonly subtitle: string
