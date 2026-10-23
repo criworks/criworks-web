@@ -8,6 +8,7 @@
 @import './theme/colors.css';
 @import './theme/typography.css';
 @import './theme/layout.css';
+@import './theme/home.css';
 
 /* Animation base states */
 @import './animations/backdrop.css';

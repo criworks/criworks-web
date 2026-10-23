@@ -17,7 +17,7 @@ const { colors, label } = Astro.props
 ---
 
 <div class="flex flex-col items-start gap-1" data-accent-picker>
-  <div role="radiogroup" aria-label={label} class="flex items-start rounded-full bg-white/8 p-1 backdrop-blur-[40px]">
+  <div role="radiogroup" aria-label={label} class="flex items-start rounded-full bg-glass p-1 backdrop-blur-glass">
     {
       colors.map(({ color, portrait }, i) => (
         <button
@@ -35,7 +35,7 @@ const { colors, label } = Astro.props
     }
   </div>
   <div class="relative h-[5px] w-full" aria-hidden="true">
-    <span data-accent-indicator class="absolute top-0 left-3 size-[5px] rounded-[5px] bg-white transition-transform duration-300"></span>
+    <span data-accent-indicator class="absolute top-0 left-3 size-[5px] rounded-full bg-foreground transition-transform duration-300"></span>
   </div>
 </div>
 

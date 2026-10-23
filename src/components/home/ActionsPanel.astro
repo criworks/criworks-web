@@ -3,7 +3,7 @@
 // `default` panel shows first; the others stay hidden until a ToolbarSelect
 // opens them (give them the id it `controls`). With `wide` the items keep
 // the 281px of the design side by side, centered past the column; when the
-// viewport can't fit two of them (604px with the page gutters) they stack
+// viewport can't fit two of them (the cards breakpoint) they stack
 // at the column's width.
 interface Props {
   id?: string
@@ -21,7 +21,7 @@ const { id, default: isDefault = false, wide = false } = Astro.props
   class:list={[
     'w-full items-start justify-center gap-2.5 [&:not([hidden])]:flex',
     wide &&
-      'flex-col *:w-full min-[604px]:relative min-[604px]:left-1/2 min-[604px]:w-dvw min-[604px]:flex-none min-[604px]:-translate-x-1/2 min-[604px]:flex-row min-[604px]:px-4 min-[604px]:*:w-70.25 min-[604px]:*:flex-none',
+      'flex-col *:w-full cards:relative cards:left-1/2 cards:w-dvw cards:flex-none cards:-translate-x-1/2 cards:flex-row cards:px-4 cards:*:w-70.25 cards:*:flex-none',
   ]}
 >
   <slot />
